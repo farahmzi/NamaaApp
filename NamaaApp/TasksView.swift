@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TasksView: View {
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ZStack {
             // Background gradient matching the design
@@ -28,7 +30,7 @@ struct TasksView: View {
                     // Header
                     HStack {
                         Spacer()
-                        Text("مهام اليوم")
+                        Text("Today’s Tasks")
                             .font(.system(size: 22, weight: .bold))
                             .foregroundColor(.white)
                         Spacer()
@@ -40,10 +42,10 @@ struct TasksView: View {
                     VStack(spacing: 12) {
                         NavigationLink(destination: DailyStoryView()) {
                             TaskCard(
-                                title: "قراءة القصة اليومية",
-                                category: "التواصل",
-                                duration: "10:00 صباحاً",
-                                minutes: "15 دقيقة",
+                                title: "Daily Story Reading",
+                                category: "Communication",
+                                duration: "10:00 AM",
+                                minutes: "15 min",
                                 icon: "book.fill",
                                 iconColor: Color(red: 255/255, green: 200/255, blue: 100/255),
                                 isCompleted: true
@@ -51,30 +53,30 @@ struct TasksView: View {
                         }
 
                         TaskCard(
-                            title: "لعبة الأشكال والألوان",
-                            category: "الإدراك",
-                            duration: "11:30 صباحاً",
-                            minutes: "20 دقيقة",
+                            title: "Shapes & Colors Game",
+                            category: "Cognition",
+                            duration: "11:30 AM",
+                            minutes: "20 min",
                             icon: "square.grid.2x2.fill",
                             iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
                             isCompleted: true
                         )
 
                         TaskCard(
-                            title: "وقت اللعب الجماعي",
-                            category: "الاجتماعية",
-                            duration: "02:00 مساءً",
-                            minutes: "30 دقيقة",
+                            title: "Group Play Time",
+                            category: "Social",
+                            duration: "02:00 PM",
+                            minutes: "30 min",
                             icon: "person.3.fill",
                             iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
                             isCompleted: false
                         )
 
                         TaskCard(
-                            title: "تمارين اليد والأصابع",
-                            category: "الحركية",
-                            duration: "04:00 مساءً",
-                            minutes: "15 دقيقة",
+                            title: "Hand & Finger Exercises",
+                            category: "Motor",
+                            duration: "04:00 PM",
+                            minutes: "15 min",
                             icon: "hand.raised.fill",
                             iconColor: Color(red: 255/255, green: 180/255, blue: 100/255),
                             isCompleted: false
@@ -86,7 +88,15 @@ struct TasksView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Label("Back", systemImage: "chevron.left")
+                }
+            }
+        }
     }
 }
 
@@ -173,13 +183,14 @@ struct TaskCard: View {
 // MARK: - Daily Story View (nested under Tasks)
 struct DailyStoryView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var showRating = false
 
     let activities = [
-        "ابدأ بجلسة هادئة ومريحة مع طفلك",
-        "اختر قصة مناسبة لعمره واهتماماته",
-        "اقرأ بصوت واضح وهادئ",
-        "توقف واسأل أسئلة بسيطة عن القصة",
-        "شجع طفلك على المشاركة والتعبير"
+        "Start a calm and cozy session with your child",
+        "Pick a story suitable for their age and interests",
+        "Read clearly and calmly",
+        "Pause and ask simple questions",
+        "Encourage participation and expression"
     ]
 
     var body: some View {
@@ -197,11 +208,11 @@ struct DailyStoryView: View {
                             .foregroundColor(.white)
                             .padding(.top, 60)
 
-                        Text("قراءة القصة اليومية")
+                        Text("Daily Story Reading")
                             .font(.system(size: 22, weight: .bold))
                             .foregroundColor(.white)
 
-                        Text("التواصل")
+                        Text("Communication")
                             .font(.system(size: 15))
                             .foregroundColor(.white.opacity(0.95))
                     }
@@ -222,11 +233,11 @@ struct DailyStoryView: View {
                                         .foregroundColor(Color(red: 100/255, green: 180/255, blue: 255/255))
                                 }
 
-                                Text("المدة")
+                                Text("Duration")
                                     .font(.system(size: 13))
                                     .foregroundColor(.gray)
 
-                                Text("15 دقيقة")
+                                Text("15 min")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(.black)
                             }
@@ -242,11 +253,11 @@ struct DailyStoryView: View {
                                         .foregroundColor(Color(red: 255/255, green: 200/255, blue: 80/255))
                                 }
 
-                                Text("الخطوات")
+                                Text("Steps")
                                     .font(.system(size: 13))
                                     .foregroundColor(.gray)
 
-                                Text("5 خطوات")
+                                Text("5 steps")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(.black)
                             }
@@ -255,11 +266,11 @@ struct DailyStoryView: View {
 
                         // Description Section
                         VStack(spacing: 10) {
-                            Text("الوصف")
+                            Text("Description")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.black)
 
-                            Text("قراءة القصص تساعد في تطوير مهارات اللغة والتواصل وتعزز الخيال والإبداع. هذا النشاط ممتع ومفيد لطفلك.")
+                            Text("Reading stories develops language and communication skills and boosts imagination and creativity. It’s a fun and beneficial activity for your child.")
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
@@ -275,7 +286,7 @@ struct DailyStoryView: View {
 
                             Spacer()
 
-                            Text("خطوات النشاط")
+                            Text("Activity Steps")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.black)
                         }
@@ -318,11 +329,11 @@ struct DailyStoryView: View {
                             Spacer()
 
                             VStack(alignment: .trailing, spacing: 4) {
-                                Text("نصيحة")
+                                Text("Tip")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundColor(.black)
 
-                                Text("اختر وقت يكون فيه طفلك مرتاح ومستعد للاستماع و تسمع وتستمتع بالوقت معاً!")
+                                Text("Pick a time when your child is relaxed and ready to listen. Enjoy the moment together!")
                                     .font(.system(size: 12))
                                     .foregroundColor(.gray)
                                     .lineSpacing(3)
@@ -338,11 +349,13 @@ struct DailyStoryView: View {
                     .cornerRadius(30, corners: [.topLeft, .topRight])
 
                     // Button at bottom - on white background
-                    NavigationLink(destination: RatingView()) {
+                    Button {
+                        showRating = true
+                    } label: {
                         HStack(spacing: 10) {
                             Image(systemName: "play.fill")
                                 .font(.system(size: 18))
-                            Text("ابدأ النشاط")
+                            Text("Start Activity")
                                 .font(.system(size: 18, weight: .semibold))
                         }
                         .foregroundColor(.white)
@@ -366,24 +379,22 @@ struct DailyStoryView: View {
                     .background(Color.white)
                 }
             }
-
-            // Back Button
-            HStack {
-                Spacer()
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(width: 36, height: 36)
-                        .background(Color.white.opacity(0.3))
-                        .clipShape(Circle())
-                }
-                .padding(.trailing, 20)
-                .padding(.top, 50)
-            }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Label("Back", systemImage: "chevron.left")
+                }
+            }
+        }
+        .sheet(isPresented: $showRating) {
+            RatingView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
     }
 }
 

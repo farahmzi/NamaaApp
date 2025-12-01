@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @State private var progress: Double = 0.5
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -30,10 +31,14 @@ struct DashboardView: View {
                     VStack(spacing: 0) {
                         // Top Header
                         HStack {
-                            Button(action: {}) {
-                                Image(systemName: "heart.fill")
-                                    .font(.system(size: 20))
+                            Button(action: { dismiss() }) {
+                                Label("Back", systemImage: "chevron.left")
+                                    .labelStyle(.iconOnly)
+                                    .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(.white)
+                                    .frame(width: 36, height: 36)
+                                    .background(Color.white.opacity(0.3))
+                                    .clipShape(Circle())
                             }
 
                             Spacer()
@@ -68,7 +73,6 @@ struct DashboardView: View {
                                         .font(.system(size: 20, weight: .bold))
                                         .foregroundColor(.black)
                                 }
-
                                 Spacer()
                             }
 
@@ -118,56 +122,74 @@ struct DashboardView: View {
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
 
-                        // Tasks Section Header
+                        // Section Header
                         HStack {
-                            Text("Today's Tasks")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.black)
-
-                            Spacer()
-
-                            NavigationLink(destination: Text("View Progress")) {
-                                Text("View Weekly Progress")
+                            NavigationLink(destination: Text("Weekly progress view")) {
+                                Text("View weekly progress")
                                     .font(.system(size: 12))
                                     .foregroundColor(.blue)
                             }
+
+                            Spacer()
+
+                            Text("Today’s Tasks")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.black)
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 15)
 
-                        // Navigate to TasksView
-                        NavigationLink {
-                            TasksView()
-                        } label: {
-                            HStack {
-                                Text("Go to Tasks")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.white)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                LinearGradient(
-                                    colors: [
-                                        Color(red: 100/255, green: 150/255, blue: 255/255),
-                                        Color(red: 255/255, green: 200/255, blue: 100/255)
-                                    ],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                        // Today’s Tasks list (embedded here)
+                        VStack(spacing: 12) {
+                            // First opens details
+                            NavigationLink(destination: DailyStoryView()) {
+                                TaskCard(
+                                    title: "Daily Story Reading",
+                                    category: "Communication",
+                                    duration: "10:00 AM",
+                                    minutes: "15 min",
+                                    icon: "book.fill",
+                                    iconColor: Color(red: 255/255, green: 200/255, blue: 100/255),
+                                    isCompleted: true
                                 )
+                            }
+
+                            TaskCard(
+                                title: "Shapes & Colors Game",
+                                category: "Cognition",
+                                duration: "11:30 AM",
+                                minutes: "20 min",
+                                icon: "square.grid.2x2.fill",
+                                iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                                isCompleted: true
                             )
-                            .cornerRadius(15)
+
+                            TaskCard(
+                                title: "Group Play Time",
+                                category: "Social",
+                                duration: "02:00 PM",
+                                minutes: "30 min",
+                                icon: "person.3.fill",
+                                iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                                isCompleted: false
+                            )
+
+                            TaskCard(
+                                title: "Hand & Finger Exercises",
+                                category: "Motor",
+                                duration: "04:00 PM",
+                                minutes: "15 min",
+                                icon: "hand.raised.fill",
+                                iconColor: Color(red: 255/255, green: 180/255, blue: 100/255),
+                                isCompleted: false
+                            )
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 10)
 
-                        // Summary Button with gradient
+                        // Optional: Summary button (kept)
                         Button(action: {}) {
                             HStack {
-                                Text("Today's Summary")
+                                Text("Today Summary")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
                                 Image(systemName: "heart.fill")
@@ -195,7 +217,7 @@ struct DashboardView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .navigationBar)
+            // Keep toolbar visible; we already placed a custom back in content.
         }
     }
 }

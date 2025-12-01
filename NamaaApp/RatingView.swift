@@ -16,18 +16,15 @@ struct RatingView: View {
     let emojiLabels = ["Needs Improvement", "Good", "Excellent"]
 
     var body: some View {
-        // Keep background clear so it looks like a bottom sheet
         ScrollView {
             VStack(spacing: 20) {
-                // Small grabber indicator (to mimic iOS bottom sheet)
                 Capsule()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 40, height: 5)
                     .padding(.top, 8)
 
-                // Title
                 VStack(spacing: 6) {
-                    Text("Activity Rating")
+                    Text("Rate Activity")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.black)
                     Text("How did your child perform?")
@@ -35,7 +32,6 @@ struct RatingView: View {
                         .foregroundColor(.gray)
                 }
 
-                // Activity Card
                 HStack(spacing: 15) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 12)
@@ -47,7 +43,9 @@ struct RatingView: View {
                             .foregroundColor(.white)
                     }
 
-                    VStack(alignment: .leading, spacing: 4) {
+                    Spacer()
+
+                    VStack(alignment: .trailing, spacing: 4) {
                         Text("Daily Story Reading")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.black)
@@ -56,8 +54,6 @@ struct RatingView: View {
                             .font(.system(size: 13))
                             .foregroundColor(.gray)
                     }
-
-                    Spacer()
                 }
                 .padding(16)
                 .background(Color.white)
@@ -65,12 +61,11 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Rating Section
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Choose a Rating")
+                VStack(alignment: .trailing, spacing: 15) {
+                    Text("Choose a rating")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(.black)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
 
                     HStack(spacing: 15) {
                         ForEach(0..<3) { index in
@@ -101,26 +96,25 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Notes Section
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .trailing, spacing: 12) {
                     HStack {
                         Image(systemName: "doc.text")
                             .font(.system(size: 16))
                             .foregroundColor(.black)
 
-                        Text("Notes (Optional)")
+                        Spacer()
+
+                        Text("Notes (optional)")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.black)
-
-                        Spacer()
                     }
 
-                    Text("Add your notes about your child's performance...")
+                    Text("Add your notes about your child’s performance...")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
 
-                    ZStack(alignment: .topLeading) {
+                    ZStack(alignment: .topTrailing) {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color.gray.opacity(0.06))
                             .frame(height: 120)
@@ -130,7 +124,6 @@ struct RatingView: View {
                             .padding(12)
                             .background(Color.clear)
                             .scrollContentBackground(.hidden)
-                            .multilineTextAlignment(.leading)
                     }
                 }
                 .padding(16)
@@ -139,7 +132,6 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Save Button
                 Button(action: { dismiss() }) {
                     Text("Save Rating")
                         .font(.system(size: 17, weight: .semibold))
@@ -164,11 +156,19 @@ struct RatingView: View {
             .background(Color.clear)
         }
         .background(
-            // White sheet background with rounded top corners
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(Color(UIColor.systemBackground))
                 .ignoresSafeArea(edges: .bottom)
         )
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Label("Back", systemImage: "chevron.left")
+                }
+            }
+        }
     }
 
     private func getEmojiColor(_ index: Int) -> Color {
