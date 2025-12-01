@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @State private var progress: Double = 0.5
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -30,19 +31,23 @@ struct DashboardView: View {
                     VStack(spacing: 0) {
                         // Top Header
                         HStack {
-                            Button(action: {}) {
-                                Image(systemName: "heart.fill")
-                                    .font(.system(size: 20))
+                            Button(action: { dismiss() }) {
+                                Label("Back", systemImage: "chevron.left")
+                                    .labelStyle(.iconOnly)
+                                    .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(.white)
+                                    .frame(width: 36, height: 36)
+                                    .background(Color.white.opacity(0.3))
+                                    .clipShape(Circle())
                             }
 
                             Spacer()
 
-                            VStack(alignment: .trailing, spacing: 2) {
-                                Text("مرحباً بك 👋")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Welcome 👋")
                                     .font(.system(size: 20, weight: .bold))
                                     .foregroundColor(.white)
-                                Text("معاً نجعل اليوم مميزاً")
+                                Text("Let's make today special")
                                     .font(.system(size: 13))
                                     .foregroundColor(.white.opacity(0.9))
                             }
@@ -58,18 +63,17 @@ struct DashboardView: View {
                         .padding(.bottom, 20)
 
                         // Progress Card
-                        VStack(alignment: .trailing, spacing: 15) {
+                        VStack(alignment: .leading, spacing: 15) {
                             HStack {
-                                Spacer()
-
-                                VStack(alignment: .trailing, spacing: 4) {
-                                    Text("التقدم اليومي")
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Daily Progress")
                                         .font(.system(size: 13))
                                         .foregroundColor(.gray)
-                                    Text("2 من 4")
+                                    Text("2 of 4")
                                         .font(.system(size: 20, weight: .bold))
                                         .foregroundColor(.black)
                                 }
+                                Spacer()
                             }
 
                             Text("50%")
@@ -107,67 +111,85 @@ struct DashboardView: View {
 
                         // Date with icon
                         HStack(spacing: 8) {
-                            Spacer()
                             Image(systemName: "calendar")
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
-                            Text("الأربعاء، 18 نوفمبر 2025")
+                            Text("Wednesday, Nov 18, 2025")
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
+                            Spacer()
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
 
-                        // Tasks Section Header
+                        // Section Header
                         HStack {
-                            NavigationLink(destination: Text("عرض التقدم")) {
-                                Text("عرض التقدم الأسبوعي")
+                            NavigationLink(destination: Text("Weekly progress view")) {
+                                Text("View weekly progress")
                                     .font(.system(size: 12))
                                     .foregroundColor(.blue)
                             }
 
                             Spacer()
 
-                            Text("مهام اليوم")
+                            Text("Today’s Tasks")
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.black)
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 15)
 
-                        // Navigate to TasksView
-                        NavigationLink {
-                            TasksView()
-                        } label: {
-                            HStack {
-                                Text("اذهب إلى المهام")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.white)
-                                Image(systemName: "chevron.left")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                LinearGradient(
-                                    colors: [
-                                        Color(red: 100/255, green: 150/255, blue: 255/255),
-                                        Color(red: 255/255, green: 200/255, blue: 100/255)
-                                    ],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                        // Today’s Tasks list (embedded here)
+                        VStack(spacing: 12) {
+                            // First opens details
+                            NavigationLink(destination: DailyStoryView()) {
+                                TaskCard(
+                                    title: "Daily Story Reading",
+                                    category: "Communication",
+                                    duration: "10:00 AM",
+                                    minutes: "15 min",
+                                    icon: "book.fill",
+                                    iconColor: Color(red: 255/255, green: 200/255, blue: 100/255),
+                                    isCompleted: true
                                 )
+                            }
+
+                            TaskCard(
+                                title: "Shapes & Colors Game",
+                                category: "Cognition",
+                                duration: "11:30 AM",
+                                minutes: "20 min",
+                                icon: "square.grid.2x2.fill",
+                                iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                                isCompleted: true
                             )
-                            .cornerRadius(15)
+
+                            TaskCard(
+                                title: "Group Play Time",
+                                category: "Social",
+                                duration: "02:00 PM",
+                                minutes: "30 min",
+                                icon: "person.3.fill",
+                                iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                                isCompleted: false
+                            )
+
+                            TaskCard(
+                                title: "Hand & Finger Exercises",
+                                category: "Motor",
+                                duration: "04:00 PM",
+                                minutes: "15 min",
+                                icon: "hand.raised.fill",
+                                iconColor: Color(red: 255/255, green: 180/255, blue: 100/255),
+                                isCompleted: false
+                            )
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 10)
 
-                        // Summary Button with gradient
+                        // Optional: Summary button (kept)
                         Button(action: {}) {
                             HStack {
-                                Text("ملخص اليوم")
+                                Text("Today Summary")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
                                 Image(systemName: "heart.fill")
@@ -195,7 +217,7 @@ struct DashboardView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .navigationBar)
+            // Keep toolbar visible; we already placed a custom back in content.
         }
     }
 }

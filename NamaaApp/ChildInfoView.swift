@@ -11,6 +11,7 @@ struct ChildInfoView: View {
     @State private var parentName: String = ""
     @State private var childName: String = ""
     @State private var childLevel: String = ""
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
@@ -24,10 +25,10 @@ struct ChildInfoView: View {
                     .padding(.top, 24)
 
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text("معلومات طفلك")
+                    Text("Child Information")
                         .font(.title2.weight(.semibold))
 
-                    Text("دعنا نتعرف على طفلك المميز")
+                    Text("Let’s get to know your amazing child")
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                 }
@@ -35,31 +36,31 @@ struct ChildInfoView: View {
 
                 // Parent name card
                 InfoCard(
-                    title: "اسم الوالد",
+                    title: "Parent Name",
                     systemImage: "person.2.fill",
                     borderColor: .appYellow,
                     text: $parentName,
-                    placeholder: "ادخل اسمك"
+                    placeholder: "Enter your name"
                 )
 
                 // Child name card
                 InfoCard(
-                    title: "اسم الطفل",
+                    title: "Child Name",
                     systemImage: "person.fill",
                     borderColor: .appBlue.opacity(0.4),
                     iconBackground: .appBlue,
                     text: $childName,
-                    placeholder: "ادخل اسم طفلك"
+                    placeholder: "Enter your child’s name"
                 )
 
                 // Child level card
                 InfoCard(
-                    title: "مستوى الطفل",
+                    title: "Child Level",
                     systemImage: "chart.bar.fill",
                     borderColor: Color(.systemGray4),
                     iconBackground: Color(.systemGray5),
                     text: $childLevel,
-                    placeholder: "اذكر مستوى طفلك (مثلاً: متوسط)"
+                    placeholder: "e.g., Intermediate"
                 )
 
                 Spacer()
@@ -67,7 +68,7 @@ struct ChildInfoView: View {
                 NavigationLink {
                     SkillsSelectionView()
                 } label: {
-                    Text("متابعة")
+                    Text("Continue")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
@@ -79,7 +80,16 @@ struct ChildInfoView: View {
             }
             .padding(.horizontal, 24)
         }
-        .navigationBarBackButtonHidden(false)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Label("Back", systemImage: "chevron.left")
+                }
+            }
+        }
     }
 }
 

@@ -13,29 +13,25 @@ struct RatingView: View {
     @Environment(\.dismiss) private var dismiss
 
     let emojis = ["😟", "😐", "😊"]
-    let emojiLabels = ["يحتاج تحسين", "جيد", "ممتاز"]
+    let emojiLabels = ["Needs Improvement", "Good", "Excellent"]
 
     var body: some View {
-        // لا نضع Gradient للخلفية حتى يظهر كـ Bottom Sheet
         ScrollView {
             VStack(spacing: 20) {
-                // مؤشر سحب صغير أعلى الشيت (اختياري داخل المحتوى لنسخ شكل iOS)
                 Capsule()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 40, height: 5)
                     .padding(.top, 8)
 
-                // Title
                 VStack(spacing: 6) {
-                    Text("تقييم النشاط")
+                    Text("Rate Activity")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.black)
-                    Text("كيف كان أداء طفلك؟")
+                    Text("How did your child perform?")
                         .font(.system(size: 13))
                         .foregroundColor(.gray)
                 }
 
-                // Activity Card
                 HStack(spacing: 15) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 12)
@@ -50,11 +46,11 @@ struct RatingView: View {
                     Spacer()
 
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("قراءة القصة اليومية")
+                        Text("Daily Story Reading")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.black)
 
-                        Text("التواصل")
+                        Text("Communication")
                             .font(.system(size: 13))
                             .foregroundColor(.gray)
                     }
@@ -65,9 +61,8 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Rating Section
                 VStack(alignment: .trailing, spacing: 15) {
-                    Text("اختر التقييم")
+                    Text("Choose a rating")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -101,7 +96,6 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Notes Section
                 VStack(alignment: .trailing, spacing: 12) {
                     HStack {
                         Image(systemName: "doc.text")
@@ -110,12 +104,12 @@ struct RatingView: View {
 
                         Spacer()
 
-                        Text("ملاحظات (اختياري)")
+                        Text("Notes (optional)")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.black)
                     }
 
-                    Text("أضف ملاحظاتك عن أداء طفلك...")
+                    Text("Add your notes about your child’s performance...")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -138,9 +132,8 @@ struct RatingView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal, 20)
 
-                // Save Button
                 Button(action: { dismiss() }) {
-                    Text("حفظ التقييم")
+                    Text("Save Rating")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -163,12 +156,19 @@ struct RatingView: View {
             .background(Color.clear)
         }
         .background(
-            // خلفية الشيت البيضاء مع زوايا علوية مستديرة
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(Color(UIColor.systemBackground))
                 .ignoresSafeArea(edges: .bottom)
         )
-        // عند العرض كشيت، سنستخدم هذه الخيارات من الجهة المستدعية
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Label("Back", systemImage: "chevron.left")
+                }
+            }
+        }
     }
 
     private func getEmojiColor(_ index: Int) -> Color {
