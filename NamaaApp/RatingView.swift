@@ -13,13 +13,13 @@ struct RatingView: View {
     @Environment(\.dismiss) private var dismiss
 
     let emojis = ["😟", "😐", "😊"]
-    let emojiLabels = ["يحتاج تحسين", "جيد", "ممتاز"]
+    let emojiLabels = ["Needs Improvement", "Good", "Excellent"]
 
     var body: some View {
-        // لا نضع Gradient للخلفية حتى يظهر كـ Bottom Sheet
+        // Keep background clear so it looks like a bottom sheet
         ScrollView {
             VStack(spacing: 20) {
-                // مؤشر سحب صغير أعلى الشيت (اختياري داخل المحتوى لنسخ شكل iOS)
+                // Small grabber indicator (to mimic iOS bottom sheet)
                 Capsule()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 40, height: 5)
@@ -27,10 +27,10 @@ struct RatingView: View {
 
                 // Title
                 VStack(spacing: 6) {
-                    Text("تقييم النشاط")
+                    Text("Activity Rating")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.black)
-                    Text("كيف كان أداء طفلك؟")
+                    Text("How did your child perform?")
                         .font(.system(size: 13))
                         .foregroundColor(.gray)
                 }
@@ -47,17 +47,17 @@ struct RatingView: View {
                             .foregroundColor(.white)
                     }
 
-                    Spacer()
-
-                    VStack(alignment: .trailing, spacing: 4) {
-                        Text("قراءة القصة اليومية")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Daily Story Reading")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.black)
 
-                        Text("التواصل")
+                        Text("Communication")
                             .font(.system(size: 13))
                             .foregroundColor(.gray)
                     }
+
+                    Spacer()
                 }
                 .padding(16)
                 .background(Color.white)
@@ -66,11 +66,11 @@ struct RatingView: View {
                 .padding(.horizontal, 20)
 
                 // Rating Section
-                VStack(alignment: .trailing, spacing: 15) {
-                    Text("اختر التقييم")
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Choose a Rating")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(.black)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     HStack(spacing: 15) {
                         ForEach(0..<3) { index in
@@ -102,25 +102,25 @@ struct RatingView: View {
                 .padding(.horizontal, 20)
 
                 // Notes Section
-                VStack(alignment: .trailing, spacing: 12) {
+                VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Image(systemName: "doc.text")
                             .font(.system(size: 16))
                             .foregroundColor(.black)
 
-                        Spacer()
-
-                        Text("ملاحظات (اختياري)")
+                        Text("Notes (Optional)")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.black)
+
+                        Spacer()
                     }
 
-                    Text("أضف ملاحظاتك عن أداء طفلك...")
+                    Text("Add your notes about your child's performance...")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                    ZStack(alignment: .topTrailing) {
+                    ZStack(alignment: .topLeading) {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color.gray.opacity(0.06))
                             .frame(height: 120)
@@ -130,6 +130,7 @@ struct RatingView: View {
                             .padding(12)
                             .background(Color.clear)
                             .scrollContentBackground(.hidden)
+                            .multilineTextAlignment(.leading)
                     }
                 }
                 .padding(16)
@@ -140,7 +141,7 @@ struct RatingView: View {
 
                 // Save Button
                 Button(action: { dismiss() }) {
-                    Text("حفظ التقييم")
+                    Text("Save Rating")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -163,12 +164,11 @@ struct RatingView: View {
             .background(Color.clear)
         }
         .background(
-            // خلفية الشيت البيضاء مع زوايا علوية مستديرة
+            // White sheet background with rounded top corners
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(Color(UIColor.systemBackground))
                 .ignoresSafeArea(edges: .bottom)
         )
-        // عند العرض كشيت، سنستخدم هذه الخيارات من الجهة المستدعية
     }
 
     private func getEmojiColor(_ index: Int) -> Color {

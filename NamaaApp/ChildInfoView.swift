@@ -16,50 +16,52 @@ struct ChildInfoView: View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            VStack(alignment: .trailing, spacing: 24) {
-                // App icon placeholder
+            VStack(alignment: .leading, spacing: 24) {
+                // App icon centered
                 RoundedRectangle(cornerRadius: 24)
                     .fill(Color.appYellow)
                     .frame(width: 90, height: 90)
+                    .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 24)
 
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("معلومات طفلك")
+                // Title + subtitle centered
+                VStack(alignment: .center, spacing: 4) {
+                    Text("Your Child's Information")
                         .font(.title2.weight(.semibold))
 
-                    Text("دعنا نتعرف على طفلك المميز")
+                    Text("Let's get to know your wonderful child")
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .frame(maxWidth: .infinity, alignment: .center)
 
                 // Parent name card
                 InfoCard(
-                    title: "اسم الوالد",
+                    title: "Parent Name",
                     systemImage: "person.2.fill",
                     borderColor: .appYellow,
                     text: $parentName,
-                    placeholder: "ادخل اسمك"
+                    placeholder: "Enter your name"
                 )
 
                 // Child name card
                 InfoCard(
-                    title: "اسم الطفل",
+                    title: "Child Name",
                     systemImage: "person.fill",
                     borderColor: .appBlue.opacity(0.4),
                     iconBackground: .appBlue,
                     text: $childName,
-                    placeholder: "ادخل اسم طفلك"
+                    placeholder: "Enter your child's name"
                 )
 
                 // Child level card
                 InfoCard(
-                    title: "مستوى الطفل",
+                    title: "Child Level",
                     systemImage: "chart.bar.fill",
                     borderColor: Color(.systemGray4),
                     iconBackground: Color(.systemGray5),
                     text: $childLevel,
-                    placeholder: "اذكر مستوى طفلك (مثلاً: متوسط)"
+                    placeholder: "State your child's level (e.g., Intermediate)"
                 )
 
                 Spacer()
@@ -67,7 +69,7 @@ struct ChildInfoView: View {
                 NavigationLink {
                     SkillsSelectionView()
                 } label: {
-                    Text("متابعة")
+                    Text("Continue")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
@@ -83,7 +85,7 @@ struct ChildInfoView: View {
     }
 }
 
-// Card reusable
+// Reusable card
 struct InfoCard: View {
     let title: String
     let systemImage: String
@@ -94,11 +96,8 @@ struct InfoCard: View {
     let placeholder: String
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
                 ZStack {
                     Circle()
                         .fill(iconBackground)
@@ -107,10 +106,13 @@ struct InfoCard: View {
                         .font(.system(size: 14))
                         .foregroundStyle(Color.appYellow)
                 }
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                Spacer()
             }
 
             TextField(placeholder, text: $text)
-                .multilineTextAlignment(.trailing)
+                .multilineTextAlignment(.leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(Color.fieldBackground)

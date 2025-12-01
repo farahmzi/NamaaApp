@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Model
 struct Skill: Identifiable, Hashable {
     let id = UUID()
     let title: String
@@ -15,24 +16,26 @@ struct Skill: Identifiable, Hashable {
     let systemImage: String
 }
 
+// MARK: - SkillsSelectionView
 struct SkillsSelectionView: View {
     @State private var selectedSkills: Set<Skill> = []
+    @State private var navigate: Bool = false
 
     private let skills: [Skill] = [
-        Skill(title: "المهارات الإدراكية",
-              subtitle: "التفكير والذاكرة والانتباه",
+        Skill(title: "Cognitive Skills",
+              subtitle: "Thinking, memory, and attention",
               color: .appBlue,
               systemImage: "brain.head.profile"),
-        Skill(title: "مهارات التواصل",
-              subtitle: "اللغة والكلام والتعبير",
+        Skill(title: "Communication Skills",
+              subtitle: "Language, speech, and expression",
               color: .appYellow,
               systemImage: "bubble.left.and.bubble.right.fill"),
-        Skill(title: "مهارات اجتماعية",
-              subtitle: "التفاعل مع الآخرين",
+        Skill(title: "Social Skills",
+              subtitle: "Interaction with others",
               color: .appBlue,
               systemImage: "person.3.fill"),
-        Skill(title: "مهارات حركية",
-              subtitle: "الحركة والتفاعل",
+        Skill(title: "Motor Skills",
+              subtitle: "Movement and interaction",
               color: .appYellow,
               systemImage: "figure.walk")
     ]
@@ -41,15 +44,15 @@ struct SkillsSelectionView: View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            VStack(alignment: .trailing, spacing: 24) {
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("اختر المهارات")
+            VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Choose Skills")
                         .font(.title2.weight(.semibold))
-                    Text("حدد المهارات التي تود التركيز عليها")
+                    Text("Select the skills you want to focus on")
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 16)
 
                 ForEach(skills) { skill in
@@ -57,24 +60,34 @@ struct SkillsSelectionView: View {
                         skill: skill,
                         isSelected: selectedSkills.contains(skill)
                     )
-                    .onTapGesture {
-                        toggle(skill)
-                    }
+                    .onTapGesture { toggle(skill) }
                 }
 
                 Spacer()
 
-                NavigationLink {
-                    DashboardView()
+                // Hidden NavigationLink controlled by `navigate`
+                NavigationLink(isActive: $navigate) {
+                    // Destination after Continue
+                    TasksView()
+                    // If later you want to pass data, create init in TasksView like:
+                    // TasksView(selectedSkills: Array(selectedSkills))
                 } label: {
-                    Text("متابعة")
+                    EmptyView()
+                }
+                .hidden()
+
+                Button {
+                    navigate = true
+                } label: {
+                    Text("Continue")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.appYellow)
+                        .background(selectedSkills.isEmpty ? Color.gray.opacity(0.4) : Color.appYellow)
                         .cornerRadius(16)
                 }
+                .disabled(selectedSkills.isEmpty)
                 .padding(.bottom, 24)
             }
             .padding(.horizontal, 24)
@@ -90,13 +103,14 @@ struct SkillsSelectionView: View {
     }
 }
 
+// MARK: - SkillCard
 struct SkillCard: View {
     let skill: Skill
     let isSelected: Bool
 
     var body: some View {
         HStack(spacing: 12) {
-            // دائرة اختيار
+            // Selection circle
             Circle()
                 .strokeBorder(isSelected ? Color.appYellow : Color.gray.opacity(0.4),
                               lineWidth: isSelected ? 6 : 2)
@@ -107,14 +121,14 @@ struct SkillCard: View {
                         .padding(6)
                 )
 
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(skill.title)
                     .font(.subheadline.weight(.semibold))
                 Text(skill.subtitle)
                     .font(.footnote)
                     .foregroundStyle(.gray)
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             RoundedRectangle(cornerRadius: 14)
                 .fill(skill.color)

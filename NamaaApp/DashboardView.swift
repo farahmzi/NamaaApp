@@ -38,11 +38,11 @@ struct DashboardView: View {
 
                             Spacer()
 
-                            VStack(alignment: .trailing, spacing: 2) {
-                                Text("مرحباً بك 👋")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Welcome 👋")
                                     .font(.system(size: 20, weight: .bold))
                                     .foregroundColor(.white)
-                                Text("معاً نجعل اليوم مميزاً")
+                                Text("Let's make today special")
                                     .font(.system(size: 13))
                                     .foregroundColor(.white.opacity(0.9))
                             }
@@ -58,18 +58,18 @@ struct DashboardView: View {
                         .padding(.bottom, 20)
 
                         // Progress Card
-                        VStack(alignment: .trailing, spacing: 15) {
+                        VStack(alignment: .leading, spacing: 15) {
                             HStack {
-                                Spacer()
-
-                                VStack(alignment: .trailing, spacing: 4) {
-                                    Text("التقدم اليومي")
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Daily Progress")
                                         .font(.system(size: 13))
                                         .foregroundColor(.gray)
-                                    Text("2 من 4")
+                                    Text("2 of 4")
                                         .font(.system(size: 20, weight: .bold))
                                         .foregroundColor(.black)
                                 }
+
+                                Spacer()
                             }
 
                             Text("50%")
@@ -107,30 +107,30 @@ struct DashboardView: View {
 
                         // Date with icon
                         HStack(spacing: 8) {
-                            Spacer()
                             Image(systemName: "calendar")
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
-                            Text("الأربعاء، 18 نوفمبر 2025")
+                            Text("Wednesday, Nov 18, 2025")
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
+                            Spacer()
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
 
                         // Tasks Section Header
                         HStack {
-                            NavigationLink(destination: Text("عرض التقدم")) {
-                                Text("عرض التقدم الأسبوعي")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(.blue)
-                            }
+                            Text("Today's Tasks")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.black)
 
                             Spacer()
 
-                            Text("مهام اليوم")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.black)
+                            NavigationLink(destination: Text("View Progress")) {
+                                Text("View Weekly Progress")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.blue)
+                            }
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 15)
@@ -140,10 +140,10 @@ struct DashboardView: View {
                             TasksView()
                         } label: {
                             HStack {
-                                Text("اذهب إلى المهام")
+                                Text("Go to Tasks")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
-                                Image(systemName: "chevron.left")
+                                Image(systemName: "chevron.right")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
                             }
@@ -167,7 +167,7 @@ struct DashboardView: View {
                         // Summary Button with gradient
                         Button(action: {}) {
                             HStack {
-                                Text("ملخص اليوم")
+                                Text("Today's Summary")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
                                 Image(systemName: "heart.fill")

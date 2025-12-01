@@ -12,10 +12,10 @@ struct WelcomeView: View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            VStack(spacing: 24) {
+            VStack(alignment: .leading, spacing: 24) {
                 Spacer()
 
-                // دائرة الأيقونة
+                // App icon circle
                 ZStack {
                     Circle()
                         .stroke(Color.appYellow, lineWidth: 5)
@@ -32,7 +32,7 @@ struct WelcomeView: View {
                     .font(.subheadline)
                     .foregroundStyle(Color.gray)
 
-                Text("مرحباً بك!")
+                Text("Welcome!")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(Color.appYellow)
 
@@ -41,7 +41,7 @@ struct WelcomeView: View {
                 NavigationLink {
                     ChildInfoView()
                 } label: {
-                    Text("ابدأ")
+                    Text("Get Started")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
@@ -52,6 +52,8 @@ struct WelcomeView: View {
                         .padding(.bottom, 40)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 24)
         }
     }
 }
