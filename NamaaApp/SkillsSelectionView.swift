@@ -64,8 +64,8 @@ struct SkillsSelectionView: View {
 
                 Spacer()
 
-                Button {
-                    // TODO: استكمال التنقل للواجهة التالية
+                NavigationLink {
+                    DashboardView()
                 } label: {
                     Text("متابعة")
                         .font(.headline)
