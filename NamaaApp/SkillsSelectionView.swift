@@ -19,7 +19,6 @@ struct Skill: Identifiable, Hashable {
 // MARK: - SkillsSelectionView
 struct SkillsSelectionView: View {
     @State private var selectedSkills: Set<Skill> = []
-    @State private var navigate: Bool = false
 
     private let skills: [Skill] = [
         Skill(title: "Cognitive Skills",
@@ -65,29 +64,17 @@ struct SkillsSelectionView: View {
 
                 Spacer()
 
-                // Hidden NavigationLink controlled by `navigate`
-                NavigationLink(isActive: $navigate) {
-                    // Destination after Continue
-                    TasksView()
-                    // If later you want to pass data, create init in TasksView like:
-                    // TasksView(selectedSkills: Array(selectedSkills))
-                } label: {
-                    EmptyView()
-                }
-                .hidden()
-
                 Button {
-                    navigate = true
+                    // TODO: Continue to the next screen
                 } label: {
                     Text("Continue")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(selectedSkills.isEmpty ? Color.gray.opacity(0.4) : Color.appYellow)
+                        .background(Color.appYellow)
                         .cornerRadius(16)
                 }
-                .disabled(selectedSkills.isEmpty)
                 .padding(.bottom, 24)
             }
             .padding(.horizontal, 24)
