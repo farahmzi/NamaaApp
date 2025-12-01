@@ -29,35 +29,16 @@ struct DashboardView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Top Header
-                        HStack {
-                            Button(action: { dismiss() }) {
-                                Label("Back", systemImage: "chevron.left")
-                                    .labelStyle(.iconOnly)
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(.white)
-                                    .frame(width: 36, height: 36)
-                                    .background(Color.white.opacity(0.3))
-                                    .clipShape(Circle())
-                            }
-
-                            Spacer()
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Welcome 👋")
-                                    .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.white)
-                                Text("Let's make today special")
-                                    .font(.system(size: 13))
-                                    .foregroundColor(.white.opacity(0.9))
-                            }
-
-                            Button(action: {}) {
-                                Image(systemName: "person.circle.fill")
-                                    .font(.system(size: 28))
-                                    .foregroundColor(.white)
-                            }
+                        // Top Header: only welcome text, bigger, aligned left
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Welcome 👋")
+                                .font(.system(size: 28, weight: .bold)) // bigger
+                                .foregroundColor(.white)
+                            Text("Let's make today special")
+                                .font(.system(size: 15)) // slightly bigger
+                                .foregroundColor(.white.opacity(0.9))
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                         .padding(.top, 50)
                         .padding(.bottom, 20)
@@ -217,7 +198,16 @@ struct DashboardView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            // Keep toolbar visible; we already placed a custom back in content.
+            .toolbar {
+                // Only one back button
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("Back", systemImage: "chevron.left")
+                    }
+                }
+            }
         }
     }
 }
