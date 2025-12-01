@@ -8,97 +8,135 @@
 import SwiftUI
 
 struct Progressview: View {
+    // يمكنك تعديل الاسم والصورة هنا
+    let userName: String = "Sarah Johnson"
+    let userImage: Image = Image(systemName: "person.crop.circle.fill")
+
     var body: some View {
         ZStack {
             Color(.systemGray6)
                 .ignoresSafeArea()
-            
+
             ScrollView {
                 VStack(spacing: 25) {
-                    
+
                     // ---------------------------------------------------
-                    //   الكرت العلوي — التقدم الأسبوعي (ممتد لأعلى)
+                    //   Header gradient with avatar + name
                     // ---------------------------------------------------
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.blue.opacity(0.6), Color.yellow.opacity(0.5)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.appBlue.opacity(0.6), Color.appYellow.opacity(0.5)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
                             )
-                        )
-                        .frame(height: 190)
-                        .overlay(
-                            VStack(spacing: 12) {
-                                Image(systemName: "chart.line.uptrend.xyaxis")
-                                    .font(.system(size: 35))
-                                    .foregroundColor(.white)
-                                    .padding(15)
-                                    .background(Color.white.opacity(0.25))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                
-                                Text("التقدم الأسبوعي")
-                                    .font(.title3)
-                                    .foregroundColor(.white)
-                                
-                                Text("تتبع إنجازات الأسبوع")
-                                    .foregroundColor(.white.opacity(0.9))
+                            .frame(height: 220)
+
+                        VStack(spacing: 16) {
+                            // Avatar + Name
+                            HStack(spacing: 12) {
+                                // صورة دائرية
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.white.opacity(0.25))
+                                        .frame(width: 52, height: 52)
+
+                                    userImage
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 44, height: 44)
+                                        .foregroundStyle(.white)
+                                }
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Welcome back,")
+                                        .font(.footnote)
+                                        .foregroundStyle(.white.opacity(0.9))
+                                    Text(userName)
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                }
+
+                                Spacer()
                             }
-                        )
-                        .padding(.horizontal)
-                        .padding(.top, -35)     // ← هذا اللي يخليه ممتد لفوق
-    
-    
+                            .padding(.horizontal, 22)
+
+                            // أيقونة + عنوان ووصف كما في التصميم
+                            Image(systemName: "chart.line.uptrend.xyaxis")
+                                .font(.system(size: 35))
+                                .foregroundColor(.white)
+                                .padding(15)
+                                .background(Color.white.opacity(0.25))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+
+                            Text("Weekly Progress")
+                                .font(.title3)
+                                .foregroundColor(.white)
+
+                            Text("Track this week’s achievements")
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        .padding(.top, 6)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, -35) // نفس الامتداد للأعلى
+
                     // ---------------------------------------------------
-                    //   كرت نسبة الإنجاز الأسبوعية
+                    //   Weekly Completion card
                     // ---------------------------------------------------
                     RoundedRectangle(cornerRadius: 30)
                         .fill(
                             LinearGradient(
-                                colors: [Color.blue.opacity(0.6), Color.yellow.opacity(0.5)],
+                                colors: [Color.appBlue.opacity(0.6), Color.appYellow.opacity(0.5)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(height: 150)
                         .overlay(
-                            HStack(spacing: 20) {
-                                
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.white.opacity(0.25))
-                                    .frame(width: 80, height: 80)
-                                    .overlay(
-                                        Image(systemName: "chart.bar.fill")
+                            VStack(spacing: 16) {
+                                HStack(spacing: 20) {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .fill(Color.white.opacity(0.25))
+                                        .frame(width: 80, height: 80)
+                                        .overlay(
+                                            Image(systemName: "chart.bar.fill")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 35))
+                                        )
+
+                                    Spacer()
+
+                                    VStack(alignment: .trailing, spacing: 6) {
+                                        Text("Weekly Completion")
                                             .foregroundColor(.white)
-                                            .font(.system(size: 35))
-                                    )
-                                
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text("نسبة الإنجاز الأسبوعية")
-                                        .foregroundColor(.white)
-                                        .font(.headline)
-                                    
-                                    Text("50%")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 34, weight: .bold))
-                                    
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.white.opacity(0.4))
-                                            .frame(height: 7)
-                                        
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.white)
-                                            .frame(width: 210, height: 7)
+                                            .font(.headline)
+
+                                        Text("50%")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 34, weight: .bold))
                                     }
+                                }
+
+                                // progress bar like the mock
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.white.opacity(0.4))
+                                        .frame(height: 8)
+
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.white)
+                                        .frame(width: 130, height: 8)
                                 }
                             }
                             .padding(.horizontal, 25)
                         )
                         .padding(.horizontal)
-                    
+
                     // ---------------------------------------------------
-                    //   كرت تفاصيل الأيام
+                    //   Day Details card
                     // ---------------------------------------------------
                     RoundedRectangle(cornerRadius: 30)
                         .fill(Color.white)
@@ -108,19 +146,22 @@ struct Progressview: View {
                         .padding(.horizontal)
                         .overlay(
                             VStack(alignment: .leading, spacing: 20) {
-                                Text("تفاصيل الأيام")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(.top, 20)
-                                
-                                dayRow(day: "الأحد")
-                                dayRow(day: "الاثنين")
-                                dayRow(day: "الثلاثاء")
-                                dayRow(day: "الأربعاء")
-                                dayRow(day: "الخميس")
-                                dayRow(day: "الجمعة")
-                                dayRow(day: "السبت")
-                                
+                                HStack {
+                                    Spacer()
+                                    Text("Day Details")
+                                        .font(.title3)
+                                        .bold()
+                                        .padding(.top, 20)
+                                }
+
+                                dayRow(day: "Sunday")
+                                dayRow(day: "Monday")
+                                dayRow(day: "Tuesday")
+                                dayRow(day: "Wednesday")
+                                dayRow(day: "Thursday")
+                                dayRow(day: "Friday")
+                                dayRow(day: "Saturday")
+
                                 Spacer()
                             }
                             .padding(.horizontal, 25)
@@ -134,34 +175,37 @@ struct Progressview: View {
 
 
 // -------------------------------------------------------------
-//   مكوّن صف اليوم (نفس الشكل 100% كما في الصورة)
+//   Day row component (same look as the mock)
 // -------------------------------------------------------------
 func dayRow(day: String) -> some View {
     HStack {
         Text("50%")
             .font(.system(size: 14))
-            .foregroundColor(.gray)
-        
+            .foregroundColor(.black.opacity(0.75))
+
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.15))
+                .fill(Color.gray.opacity(0.18))
                 .frame(width: 180, height: 7)
-            
+
+            // short gradient fill (like the small colored tip in mock)
             RoundedRectangle(cornerRadius: 10)
                 .fill(
                     LinearGradient(
-                        colors: [Color.yellow, Color.blue],
+                        colors: [Color.appYellow, Color.appBlue],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
                 )
                 .frame(width: 90, height: 7)
         }
-        
+
         Spacer()
-        
+
         Text(day)
             .font(.system(size: 16))
+            .foregroundColor(.black)
+            .frame(width: 90, alignment: .trailing)
     }
 }
 
