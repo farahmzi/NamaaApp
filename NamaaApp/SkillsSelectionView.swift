@@ -65,9 +65,7 @@ struct SkillsSelectionView: View {
 
                 Spacer()
 
-                // Hidden NavigationLink controlled by `navigate`
                 NavigationLink(isActive: $navigate) {
-                    // New destination after Continue
                     DashboardView()
                 } label: {
                     EmptyView()
@@ -147,4 +145,8 @@ struct SkillCard: View {
                 )
         )
     }
+}
+
+#Preview {
+    NavigationStack { SkillsSelectionView() }
 }

@@ -12,7 +12,7 @@ struct WelcomeView: View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(spacing: 24) {
                 Spacer()
 
                 // App icon circle
@@ -56,4 +56,8 @@ struct WelcomeView: View {
             .padding(.horizontal, 24)
         }
     }
+}
+
+#Preview {
+    NavigationStack { WelcomeView() }
 }
