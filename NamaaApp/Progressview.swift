@@ -188,7 +188,6 @@ func dayRow(day: String) -> some View {
                 .fill(Color.gray.opacity(0.18))
                 .frame(width: 180, height: 7)
 
-            // short gradient fill (like the small colored tip in mock)
             RoundedRectangle(cornerRadius: 10)
                 .fill(
                     LinearGradient(

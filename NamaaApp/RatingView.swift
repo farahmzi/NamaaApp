@@ -160,15 +160,6 @@ struct RatingView: View {
                 .fill(Color(UIColor.systemBackground))
                 .ignoresSafeArea(edges: .bottom)
         )
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Back", systemImage: "chevron.left")
-                }
-            }
-        }
     }
 
     private func getEmojiColor(_ index: Int) -> Color {
@@ -179,4 +170,8 @@ struct RatingView: View {
         default: return Color.white
         }
     }
+}
+
+#Preview {
+    NavigationStack { RatingView() }
 }
