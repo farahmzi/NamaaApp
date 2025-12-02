@@ -139,11 +139,49 @@ struct DashboardView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 15)
 
-                    // Placeholder list
+                    // Tasks list (from TasksView)
                     VStack(spacing: 12) {
-                        Text("No tasks connected in this demo.")
-                            .foregroundColor(.white)
-                            .padding(.vertical, 60)
+                        NavigationLink(destination: DailyStoryView()) {
+                            TaskCard(
+                                title: "Daily Story Reading",
+                                category: "Communication",
+                                duration: "10:00 AM",
+                                minutes: "15 min",
+                                icon: "book.fill",
+                                iconColor: Color(red: 255/255, green: 200/255, blue: 100/255),
+                                isCompleted: true
+                            )
+                        }
+
+                        TaskCard(
+                            title: "Shapes & Colors Game",
+                            category: "Cognition",
+                            duration: "11:30 AM",
+                            minutes: "20 min",
+                            icon: "square.grid.2x2.fill",
+                            iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                            isCompleted: true
+                        )
+
+                        TaskCard(
+                            title: "Group Play Time",
+                            category: "Social",
+                            duration: "02:00 PM",
+                            minutes: "30 min",
+                            icon: "person.3.fill",
+                            iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
+                            isCompleted: false
+                        )
+
+                        TaskCard(
+                            title: "Hand & Finger Exercises",
+                            category: "Motor",
+                            duration: "04:00 PM",
+                            minutes: "15 min",
+                            icon: "hand.raised.fill",
+                            iconColor: Color(red: 255/255, green: 180/255, blue: 100/255),
+                            isCompleted: false
+                        )
                     }
                     .padding(.horizontal, 20)
 
