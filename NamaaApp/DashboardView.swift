@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @State private var progress: Double = 0.5
+    @EnvironmentObject private var appModel: AppModel
+    @State private var showCelebration = false
 
     var body: some View {
         ZStack {
-            // Background gradient
             LinearGradient(
                 colors: [
                     Color(red: 130/255, green: 180/255, blue: 240/255),
@@ -27,61 +27,50 @@ struct DashboardView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    // Top Header (no custom back; system back will appear automatically)
                     HStack {
-                        // Left icon (optional)
-                        Button(action: {}) {
-                            Image(systemName: "heart.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
-                        }
-
                         Spacer()
-
-                        // Welcome + description aligned for English (leading)
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text("Welcome 👋")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 26, weight: .bold))
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-
                             Text("Let's make today special")
-                                .font(.system(size: 13))
-                                .foregroundColor(.white.opacity(0.9))
+                                .font(.system(size: 16))
+                                .foregroundColor(.white.opacity(0.95))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-
-                        // Right profile icon
-                        Button(action: {}) {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 28))
-                                .foregroundColor(.white)
-                        }
+                        Spacer()
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 50)
+                    .padding(.top, 20)
                     .padding(.bottom, 20)
 
-                    // Progress Card
                     VStack(alignment: .leading, spacing: 15) {
-                        HStack {
+                        HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Daily Progress")
                                     .font(.system(size: 13))
                                     .foregroundColor(.gray)
-                                Text("2 of 4")
-                                    .font(.system(size: 20, weight: .bold))
+                                Text("\(appModel.completedCount) of 4")
+                                    .font(.system(size: 22, weight: .bold))
                                     .foregroundColor(.black)
                             }
                             Spacer()
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.appBlue.opacity(0.15))
+                                    .frame(width: 60, height: 60)
+                                Image(systemName: "rosette")
+                                    .font(.system(size: 26, weight: .semibold))
+                                    .foregroundStyle(Color.appBlue)
+                            }
                         }
 
-                        Text("50%")
-                            .font(.system(size: 36, weight: .bold))
+                        Text("\(Int((Double(appModel.completedCount) / 4.0) * 100))%")
+                            .font(.system(size: 38, weight: .bold))
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        // Progress bar
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
                                 RoundedRectangle(cornerRadius: 10)
@@ -96,7 +85,7 @@ struct DashboardView: View {
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
-                                .frame(width: geometry.size.width * progress, height: 8)
+                                .frame(width: geometry.size.width * CGFloat(appModel.completedCount) / 4.0, height: 8)
                                 .cornerRadius(10)
                             }
                         }
@@ -109,117 +98,101 @@ struct DashboardView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 15)
 
-                    // Date with icon
-                    HStack(spacing: 8) {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 13))
-                            .foregroundColor(.gray)
-                        Text("Wednesday, Nov 18, 2025")
-                            .font(.system(size: 13))
-                            .foregroundColor(.gray)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
-
-                    // Section Header
                     HStack {
-                        NavigationLink(destination: Text("Weekly progress view")) {
-                            Text("View weekly progress")
-                                .font(.system(size: 12))
-                                .foregroundColor(.blue)
-                        }
-
-                        Spacer()
-
                         Text("Today’s Tasks")
-                            .font(.system(size: 18, weight: .bold))
+                            .font(.system(size: 20, weight: .bold))
                             .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 15)
 
-                    // Tasks list (from TasksView)
+                    Color.clear.frame(height: 0).onAppear {
+                        appModel.ensureTasksForToday()
+                        updateCelebration()
+                    }
+
                     VStack(spacing: 12) {
-                        NavigationLink(destination: DailyStoryView()) {
-                            TaskCard(
-                                title: "Daily Story Reading",
-                                category: "Communication",
-                                duration: "10:00 AM",
-                                minutes: "15 min",
-                                icon: "book.fill",
-                                iconColor: Color(red: 255/255, green: 200/255, blue: 100/255),
-                                isCompleted: true
-                            )
+                        ForEach(appModel.todayTasks) { task in
+                            NavigationLink {
+                                TaskDetailView(task: task)
+                            } label: {
+                                TaskRow(task: task)
+                            }
+                            .disabled(task.isCompleted)
                         }
-
-                        TaskCard(
-                            title: "Shapes & Colors Game",
-                            category: "Cognition",
-                            duration: "11:30 AM",
-                            minutes: "20 min",
-                            icon: "square.grid.2x2.fill",
-                            iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
-                            isCompleted: true
-                        )
-
-                        TaskCard(
-                            title: "Group Play Time",
-                            category: "Social",
-                            duration: "02:00 PM",
-                            minutes: "30 min",
-                            icon: "person.3.fill",
-                            iconColor: Color(red: 100/255, green: 150/255, blue: 255/255),
-                            isCompleted: false
-                        )
-
-                        TaskCard(
-                            title: "Hand & Finger Exercises",
-                            category: "Motor",
-                            duration: "04:00 PM",
-                            minutes: "15 min",
-                            icon: "hand.raised.fill",
-                            iconColor: Color(red: 255/255, green: 180/255, blue: 100/255),
-                            isCompleted: false
-                        )
                     }
                     .padding(.horizontal, 20)
 
-                    Button(action: {}) {
-                        HStack {
-                            Text("Today Summary")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.white)
-                            Image(systemName: "heart.fill")
-                                .font(.system(size: 16))
-                                .foregroundColor(.white)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(
-                            LinearGradient(
-                                colors: [
-                                    Color(red: 100/255, green: 150/255, blue: 255/255),
-                                    Color(red: 255/255, green: 200/255, blue: 100/255)
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .cornerRadius(15)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 15)
-                    .padding(.bottom, 40)
+                    Spacer(minLength: 30)
                 }
             }
         }
-        // Important: allow the system back button to appear when pushed
-        // by NOT hiding it.
-        // .navigationBarBackButtonHidden(false) is the default.
+        .navigationBarBackButtonHidden(true)
+        .onChange(of: appModel.completedCount) { _, _ in
+            updateCelebration()
+        }
+        .fullScreenCover(isPresented: $showCelebration) {
+            CelebrationView(parentName: appModel.parentName) {
+                showCelebration = false
+            }
+        }
+    }
+
+    private func updateCelebration() {
+        showCelebration = appModel.allCompleted
+    }
+}
+
+private struct TaskRow: View {
+    let task: TaskItem
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.appBlue.opacity(0.2))
+                    .frame(width: 50, height: 50)
+                Image(systemName: task.icon)
+                    .font(.system(size: 24))
+                    .foregroundColor(Color.appBlue)
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(task.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(task.isCompleted ? .gray : .black)
+
+                Text(task.category)
+                    .font(.system(size: 11))
+                    .foregroundColor(.gray)
+            }
+
+            ZStack {
+                Circle()
+                    .strokeBorder(task.isCompleted ? Color.clear : Color.gray.opacity(0.3), lineWidth: 2)
+                    .background(
+                        Circle()
+                            .fill(task.isCompleted ? Color.gray.opacity(0.5) : Color.white)
+                    )
+                    .frame(width: 24, height: 24)
+
+                if task.isCompleted {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.white)
+                }
+            }
+        }
+        .padding(15)
+        .background(Color.white.opacity(task.isCompleted ? 0.6 : 1.0))
+        .cornerRadius(15)
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
     }
 }
 
 #Preview {
-    NavigationStack { DashboardView() }
+    NavigationStack { DashboardView().environmentObject(AppModel()) }
 }

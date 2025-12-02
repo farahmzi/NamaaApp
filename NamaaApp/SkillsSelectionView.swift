@@ -18,6 +18,8 @@ struct Skill: Identifiable, Hashable {
 
 // MARK: - SkillsSelectionView
 struct SkillsSelectionView: View {
+    @EnvironmentObject private var appModel: AppModel
+
     @State private var selectedSkills: Set<Skill> = []
     @State private var navigate: Bool = false
 
@@ -66,13 +68,19 @@ struct SkillsSelectionView: View {
                 Spacer()
 
                 NavigationLink(isActive: $navigate) {
-                    DashboardView()
+                    RootTabView()
+                        .navigationBarBackButtonHidden(true)
+                        .onAppear {
+                            appModel.ensureTasksForToday()
+                        }
                 } label: {
                     EmptyView()
                 }
                 .hidden()
 
                 Button {
+                    appModel.selectedSkills = selectedSkills
+                    appModel.ensureTasksForToday()
                     navigate = true
                 } label: {
                     Text("Continue")
@@ -88,6 +96,7 @@ struct SkillsSelectionView: View {
             }
             .padding(.horizontal, 24)
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     private func toggle(_ skill: Skill) {
@@ -106,16 +115,21 @@ struct SkillCard: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Selection circle
-            Circle()
-                .strokeBorder(isSelected ? Color.appYellow : Color.gray.opacity(0.4),
-                              lineWidth: isSelected ? 6 : 2)
-                .frame(width: 26, height: 26)
-                .overlay(
-                    Circle()
-                        .fill(isSelected ? Color.appYellow : Color.clear)
-                        .padding(6)
-                )
+            // Selection circle with checkmark when selected
+            ZStack {
+                Circle()
+                    .strokeBorder(isSelected ? Color.appYellow : Color.gray.opacity(0.4),
+                                  lineWidth: isSelected ? 6 : 2)
+                    .frame(width: 26, height: 26)
+
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(4)
+                        .background(Circle().fill(Color.appYellow))
+                }
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(skill.title)
@@ -148,5 +162,5 @@ struct SkillCard: View {
 }
 
 #Preview {
-    NavigationStack { SkillsSelectionView() }
+    NavigationStack { SkillsSelectionView().environmentObject(AppModel()) }
 }

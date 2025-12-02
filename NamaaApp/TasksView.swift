@@ -88,15 +88,7 @@ struct TasksView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Back", systemImage: "chevron.left")
-                }
-            }
-        }
+        // Removed custom toolbar back button to avoid duplication with system back
     }
 }
 
@@ -381,15 +373,7 @@ struct DailyStoryView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Back", systemImage: "chevron.left")
-                }
-            }
-        }
+        // Removed custom toolbar back button to avoid duplication with system back
         .sheet(isPresented: $showRating) {
             RatingView()
                 .presentationDetents([.medium, .large])
@@ -422,3 +406,4 @@ struct RoundedCorner: Shape {
 #Preview {
     TasksView()
 }
+

@@ -2,143 +2,102 @@
 //  CelebrationView.swift
 //  NamaaApp
 //
-//  Created by hg on 10/06/1447 AH.
+//  Created by Assistant on 02/12/2025.
 //
 
 import SwiftUI
 
 struct CelebrationView: View {
-    @State private var progress: CGFloat = 0.0
-    
+    let parentName: String
+    let onDismiss: () -> Void
+
+    @State private var animate = false
+
     var body: some View {
         ZStack {
-            // الخلفية
+            // Match app gradient
             LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 0.85, green: 0.93, blue: 1.0),
-                    Color(red: 0.95, green: 0.97, blue: 0.85)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
+                colors: [
+                    Color(red: 130/255, green: 180/255, blue: 240/255),
+                    Color(red: 200/255, green: 230/255, blue: 250/255),
+                    Color(red: 255/255, green: 250/255, blue: 200/255),
+                    Color(red: 255/255, green: 220/255, blue: 100/255)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            
-            VStack(spacing: 30) {
-                
-                // دائرة النسبة
-                ZStack {
-                    Circle()
-                        .stroke(Color.white.opacity(0.4), lineWidth: 18)
-                        .frame(width: 230, height: 230)
-                    
-                    Circle()
-                        .trim(from: 0, to: progress)
-                        .stroke(
-                            Color.white,
-                            style: StrokeStyle(lineWidth: 18, lineCap: .round)
-                        )
-                        .rotationEffect(.degrees(-90))
-                        .frame(width: 230, height: 230)
-                        .animation(.easeOut(duration: 1.5), value: progress)
-                    
-                    VStack {
-                        Text("🎉")
-                            .font(.system(size: 40))
-                        Text("\(Int(progress * 100))%")
-                            .font(.system(size: 38, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                }
-                .padding(.top, 40)
-                .onAppear {
-                    progress = 0.75
-                }
-                
-                // البوكسين
-                HStack(spacing: 20) {
-                    statBox(color: .blue, number: "45", title: "دقيقة نشاط")
-                    statBox(color: .yellow, number: "3", title: "مهام مكتملة")
-                }
-                
-                // رسالة تحفيزية
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text("رسالة تحفيزية 💪")
-                            .font(.headline)
-                        Spacer()
-                    }
-                    Text("الرسالة")
-                        .foregroundColor(.gray)
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.white.opacity(0.85))
-                .cornerRadius(25)
-                .padding(.horizontal)
-                
-                // شارة جديدة
-                HStack {
-                    Image(systemName: "trophy.fill")
-                    Spacer()
-                    VStack(alignment: .center) {
-                        Text("شارة جديدة")
-                            .font(.headline)
-                        Text("بطل الأسبوع")
-                            .font(.subheadline)
-                    }
-                    Spacer()
-                    Image(systemName: "star.circle.fill")
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.yellow.opacity(0.8))
-                .cornerRadius(25)
-                .padding(.horizontal)
-                
-                // زر العودة
-                HStack {
-                    Spacer()
-                    Text("العودة للرئيسية")
-                        .font(.headline)
-                    Image(systemName: "house")
-                    Spacer()
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.yellow.opacity(0.7))
-                .cornerRadius(25)
-                .padding(.horizontal)
-                
+
+            VStack(spacing: 20) {
                 Spacer()
+
+                Image(systemName: "hands.clap.fill")
+                    .font(.system(size: 80))
+                    .foregroundStyle(.white)
+                    .shadow(radius: 8)
+
+                Text("You're done for the day, \(parentName.isEmpty ? "Great job" : parentName)!")
+                    .font(.system(size: 28, weight: .bold))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 24)
+
+                Text("Amazing effort supporting your child today. See you tomorrow for new fun tasks!")
+                    .font(.system(size: 16))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white.opacity(0.95))
+                    .padding(.horizontal, 32)
+
+                Spacer()
+
+                Button {
+                    onDismiss()
+                } label: {
+                    Text("Back to Home")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.appYellow)
+                        .cornerRadius(16)
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
+                }
             }
         }
-    }
-    
-    // دالة البوكسات الصغيرة
-    func statBox(color: Color, number: String, title: String) -> some View {
-        VStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(color.opacity(0.8))
-                .frame(width: 50, height: 50)
-                .overlay(
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .foregroundColor(.white)
-                )
-            
-            Text(number)
-                .font(.title2)
-            
-            Text(title)
-                .font(.footnote)
-                .foregroundColor(.gray)
+        .onAppear {
+            animate = true
         }
-        .padding()
-        .frame(width: 150, height: 130)
-        .background(Color.white.opacity(0.85))
-        .cornerRadius(20)
+    }
+}
+
+
+private struct Particle: View {
+    let emoji: String
+    @State private var x: CGFloat = .zero
+    @State private var y: CGFloat = -100
+    @State private var rotation: Double = 0
+    @State private var size: CGFloat = 20
+
+    var body: some View {
+        Text(emoji)
+            .font(.system(size: size))
+            .rotationEffect(.degrees(rotation))
+            .position(x: x, y: y)
+            .onAppear {
+                let screen = UIScreen.main.bounds
+                x = CGFloat.random(in: 0...screen.width)
+                size = CGFloat.random(in: 18...30)
+                withAnimation(.easeOut(duration: 1.0)) {
+                    rotation = Double.random(in: -90...90)
+                }
+                withAnimation(.interpolatingSpring(stiffness: 30, damping: 12).delay(Double.random(in: 0...0.4))) {
+                    y = CGFloat.random(in: screen.height * 0.4...screen.height * 0.9)
+                }
+            }
     }
 }
 
 #Preview {
-    CelebrationView()
+    CelebrationView(parentName: "Sarah") { }
 }

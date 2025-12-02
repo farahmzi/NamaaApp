@@ -8,23 +8,29 @@
 import SwiftUI
 
 struct ChildInfoView: View {
+    @EnvironmentObject private var appModel: AppModel
+
     @State private var parentName: String = ""
     @State private var childName: String = ""
-    @State private var childLevel: String = ""
+    @State private var localLevel: ChildLevel = .beginner
 
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            VStack(alignment: .leading, spacing: 24) {
-                // App icon centered
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.appYellow)
-                    .frame(width: 90, height: 90)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 24)
+            VStack(alignment: .leading, spacing: 20) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(Color.appYellow.opacity(0.15))
+                        .frame(width: 90, height: 90)
 
-                // Title + subtitle centered
+                    Image(systemName: "person.text.rectangle")
+                        .font(.system(size: 36, weight: .semibold))
+                        .foregroundStyle(Color.appYellow)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 12)
+
                 VStack(alignment: .center, spacing: 4) {
                     Text("Your Child's Information")
                         .font(.title2.weight(.semibold))
@@ -35,39 +41,65 @@ struct ChildInfoView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
 
-                // Parent name card
                 InfoCard(
                     title: "Parent Name",
                     systemImage: "person.2.fill",
                     borderColor: .appYellow,
+                    iconBackground: .appYellow.opacity(0.15),
                     text: $parentName,
                     placeholder: "Enter your name"
                 )
 
-                // Child name card
                 InfoCard(
                     title: "Child Name",
                     systemImage: "person.fill",
-                    borderColor: .appBlue.opacity(0.4),
-                    iconBackground: .appBlue,
+                    borderColor: .appBlue.opacity(0.35),
+                    iconBackground: .appBlue.opacity(0.15),
                     text: $childName,
                     placeholder: "Enter your child's name"
                 )
 
-                // Child level card
-                InfoCard(
-                    title: "Child Level",
-                    systemImage: "chart.bar.fill",
-                    borderColor: Color(.systemGray4),
-                    iconBackground: Color(.systemGray5),
-                    text: $childLevel,
-                    placeholder: "State your child's level (e.g., Intermediate)"
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .fill(Color.appYellow.opacity(0.15))
+                                .frame(width: 32, height: 32)
+                            Image(systemName: "chart.bar.fill")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.appYellow)
+                        }
+                        Text("Child Level")
+                            .font(.subheadline.weight(.semibold))
+                        Spacer()
+                    }
+
+                    Picker("Child Level", selection: $localLevel) {
+                        ForEach(ChildLevel.allCases) { level in
+                            Text(level.rawValue).tag(level)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                .padding(14)
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(Color.appYellow.opacity(0.35), lineWidth: 1.5)
+                        .background(
+                            RoundedRectangle(cornerRadius: 18)
+                                .fill(Color.white)
+                        )
                 )
 
                 Spacer()
 
                 NavigationLink {
                     SkillsSelectionView()
+                        .navigationBarBackButtonHidden(true)
+                        .onAppear {
+                            appModel.childLevel = localLevel
+                            appModel.parentName = parentName
+                        }
                 } label: {
                     Text("Continue")
                         .font(.headline)
@@ -81,55 +113,10 @@ struct ChildInfoView: View {
             }
             .padding(.horizontal, 24)
         }
-        .navigationBarBackButtonHidden(false)
-    }
-}
-
-// Reusable card
-struct InfoCard: View {
-    let title: String
-    let systemImage: String
-    let borderColor: Color
-    var iconBackground: Color = .appYellow.opacity(0.15)
-
-    @Binding var text: String
-    let placeholder: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                ZStack {
-                    Circle()
-                        .fill(iconBackground)
-                        .frame(width: 32, height: 32)
-                    Image(systemName: systemImage)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.appYellow)
-                }
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-            }
-
-            TextField(placeholder, text: $text)
-                .multilineTextAlignment(.leading)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(Color.fieldBackground)
-                .cornerRadius(22)
-        }
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(borderColor, lineWidth: 1.5)
-                .background(
-                    RoundedRectangle(cornerRadius: 18)
-                        .fill(Color.white)
-                )
-        )
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
-    NavigationStack { ChildInfoView() }
+    NavigationStack { ChildInfoView().environmentObject(AppModel()) }
 }
