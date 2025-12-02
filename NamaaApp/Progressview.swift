@@ -8,22 +8,68 @@
 import SwiftUI
 
 struct Progressview: View {
-    // يمكنك تعديل الاسم والصورة هنا
-    let userName: String = "Sarah Johnson"
-    let userImage: Image = Image(systemName: "person.crop.circle.fill")
+    // Configurable values (to match the mock)
+    private let weeklyPercentText: String = "50%"
+    private let weeklyFillWidth: CGFloat = 130
+    private let dayTrackWidth: CGFloat = 180
+    private let dayFillWidth: CGFloat = 90
+
+    // Same header gradient used in ProfileView
+    private let topGradientStart = Color(red: 0.95, green: 0.85, blue: 0.50)
+    private let topGradientEnd   = Color(red: 0.50, green: 0.70, blue: 0.95)
 
     var body: some View {
         ZStack {
             Color(.systemGray6)
                 .ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 25) {
+            VStack(spacing: 0) {
+                // ---------------------------------------------------
+                //   Header identical to Profile header
+                // ---------------------------------------------------
+                ZStack(alignment: .bottom) {
+                    LinearGradient(
+                        gradient: Gradient(colors: [topGradientStart, topGradientEnd]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .frame(height: 220)
+                    .clipShape(RoundedCornerShape(radius: 28, corners: [.bottomLeft, .bottomRight]))
 
-                    // ---------------------------------------------------
-                    //   Header gradient with avatar + name
-                    // ---------------------------------------------------
-                    ZStack {
+                    VStack(spacing: 16) {
+                        // Icon container (same style/size)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(Color.white.opacity(0.25))
+                            Image(systemName: "chart.line.uptrend.xyaxis")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                        .frame(width: 64, height: 64)
+                        .padding(.top, 12)
+
+                        // Title + subtitle in English
+                        VStack(spacing: 2) {
+                            Text("Weekly Progress")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("Track this week’s achievements")
+                                .font(.subheadline)
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                    }
+                    .padding(.bottom, 20)
+                }
+                .ignoresSafeArea(edges: .top)
+                .padding(.top, -40)
+
+                // ---------------------------------------------------
+                //   Content
+                // ---------------------------------------------------
+                ScrollView {
+                    VStack(spacing: 25) {
+
+                        // Weekly Completion card (gradient like mock)
                         RoundedRectangle(cornerRadius: 30)
                             .fill(
                                 LinearGradient(
@@ -32,152 +78,88 @@ struct Progressview: View {
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .frame(height: 220)
+                            .frame(height: 150)
+                            .overlay(
+                                VStack(spacing: 16) {
+                                    HStack(spacing: 20) {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(Color.white.opacity(0.25))
+                                            .frame(width: 80, height: 80)
+                                            .overlay(
+                                                Image(systemName: "chart.bar.fill")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 35))
+                                            )
 
-                        VStack(spacing: 16) {
-                            // Avatar + Name
-                            HStack(spacing: 12) {
-                                // صورة دائرية
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.white.opacity(0.25))
-                                        .frame(width: 52, height: 52)
+                                        Spacer()
 
-                                    userImage
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 44, height: 44)
-                                        .foregroundStyle(.white)
-                                }
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Welcome back,")
-                                        .font(.footnote)
-                                        .foregroundStyle(.white.opacity(0.9))
-                                    Text(userName)
-                                        .font(.system(size: 18, weight: .semibold))
-                                        .foregroundStyle(.white)
-                                }
-
-                                Spacer()
-                            }
-                            .padding(.horizontal, 22)
-
-                            // أيقونة + عنوان ووصف كما في التصميم
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.system(size: 35))
-                                .foregroundColor(.white)
-                                .padding(15)
-                                .background(Color.white.opacity(0.25))
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-
-                            Text("Weekly Progress")
-                                .font(.title3)
-                                .foregroundColor(.white)
-
-                            Text("Track this week’s achievements")
-                                .foregroundColor(.white.opacity(0.9))
-                        }
-                        .padding(.top, 6)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, -35) // نفس الامتداد للأعلى
-
-                    // ---------------------------------------------------
-                    //   Weekly Completion card
-                    // ---------------------------------------------------
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.appBlue.opacity(0.6), Color.appYellow.opacity(0.5)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(height: 150)
-                        .overlay(
-                            VStack(spacing: 16) {
-                                HStack(spacing: 20) {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color.white.opacity(0.25))
-                                        .frame(width: 80, height: 80)
-                                        .overlay(
-                                            Image(systemName: "chart.bar.fill")
+                                        VStack(alignment: .trailing, spacing: 6) {
+                                            Text("Weekly Completion")
                                                 .foregroundColor(.white)
-                                                .font(.system(size: 35))
-                                        )
+                                                .font(.headline)
 
-                                    Spacer()
+                                            Text(weeklyPercentText)
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 34, weight: .bold))
+                                        }
+                                    }
 
-                                    VStack(alignment: .trailing, spacing: 6) {
-                                        Text("Weekly Completion")
-                                            .foregroundColor(.white)
-                                            .font(.headline)
+                                    // Progress bar (light track + white fill)
+                                    ZStack(alignment: .leading) {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.white.opacity(0.35))
+                                            .frame(height: 8)
 
-                                        Text("50%")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 34, weight: .bold))
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.white)
+                                            .frame(width: weeklyFillWidth, height: 8)
                                     }
                                 }
+                                .padding(.horizontal, 25)
+                            )
+                            .padding(.horizontal)
 
-                                // progress bar like the mock
-                                ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.white.opacity(0.4))
-                                        .frame(height: 8)
+                        // Day Details card
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(Color.white)
+                            .shadow(color: .gray.opacity(0.25), radius: 10, y: 5)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 330)
+                            .padding(.horizontal)
+                            .overlay(
+                                VStack(alignment: .leading, spacing: 20) {
+                                    HStack {
+                                        Spacer()
+                                        Text("Day Details")
+                                            .font(.title3)
+                                            .bold()
+                                            .padding(.top, 20)
+                                    }
 
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.white)
-                                        .frame(width: 130, height: 8)
-                                }
-                            }
-                            .padding(.horizontal, 25)
-                        )
-                        .padding(.horizontal)
+                                    dayRow(day: "Sunday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Monday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Tuesday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Wednesday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Thursday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Friday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
+                                    dayRow(day: "Saturday", trackWidth: dayTrackWidth, fillWidth: dayFillWidth)
 
-                    // ---------------------------------------------------
-                    //   Day Details card
-                    // ---------------------------------------------------
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.white)
-                        .shadow(color: .gray.opacity(0.25), radius: 10, y: 5)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 330)
-                        .padding(.horizontal)
-                        .overlay(
-                            VStack(alignment: .leading, spacing: 20) {
-                                HStack {
                                     Spacer()
-                                    Text("Day Details")
-                                        .font(.title3)
-                                        .bold()
-                                        .padding(.top, 20)
                                 }
-
-                                dayRow(day: "Sunday")
-                                dayRow(day: "Monday")
-                                dayRow(day: "Tuesday")
-                                dayRow(day: "Wednesday")
-                                dayRow(day: "Thursday")
-                                dayRow(day: "Friday")
-                                dayRow(day: "Saturday")
-
-                                Spacer()
-                            }
-                            .padding(.horizontal, 25)
-                        )
+                                .padding(.horizontal, 25)
+                            )
+                    }
+                    .padding(.vertical, 25)
                 }
-                .padding(.bottom, 40)
             }
         }
     }
 }
 
-
 // -------------------------------------------------------------
-//   Day row component (same look as the mock)
+//   Day row component (same look and spacing as the mock)
 // -------------------------------------------------------------
-func dayRow(day: String) -> some View {
+private func dayRow(day: String, trackWidth: CGFloat, fillWidth: CGFloat) -> some View {
     HStack {
         Text("50%")
             .font(.system(size: 14))
@@ -186,7 +168,7 @@ func dayRow(day: String) -> some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray.opacity(0.18))
-                .frame(width: 180, height: 7)
+                .frame(width: trackWidth, height: 7)
 
             RoundedRectangle(cornerRadius: 10)
                 .fill(
@@ -196,7 +178,7 @@ func dayRow(day: String) -> some View {
                         endPoint: .trailing
                     )
                 )
-                .frame(width: 90, height: 7)
+                .frame(width: fillWidth, height: 7)
         }
 
         Spacer()
