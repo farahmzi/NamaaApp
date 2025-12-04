@@ -7,117 +7,155 @@
 
 import SwiftUI
 
+// This screen is now the Profile page.
+// It reflects and edits the same data captured in ChildInfoView.
 struct SettingsView: View {
     @EnvironmentObject private var appModel: AppModel
+    @State private var isEditing: Bool = false
+
+    // Header gradient (same palette used elsewhere)
+    private let topGradientStart = Color(red: 0.95, green: 0.85, blue: 0.50)
+    private let topGradientEnd   = Color(red: 0.50, green: 0.70, blue: 0.95)
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                // Header icon
-                ZStack {
-                    Circle()
-                        .fill(Color.appBlue.opacity(0.12))
-                        .frame(width: 90, height: 90)
-                    Image(systemName: "person.crop.circle")
-                        .font(.system(size: 44, weight: .semibold))
-                        .foregroundStyle(Color.appBlue)
+        ZStack {
+            Color.white.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Header (visual only; removed nav bar title)
+                ZStack(alignment: .bottom) {
+                    LinearGradient(
+                        gradient: Gradient(colors: [topGradientStart, topGradientEnd]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .frame(height: 180)
+                    .cornerRadius(24, corners: [.bottomLeft, .bottomRight])
+                    .overlay(alignment: .topLeading) {
+                        // Edit/Done button (left side, moved slightly down)
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isEditing.toggle()
+                            }
+                        } label: {
+                            Text(isEditing ? "Done" : "Edit")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 8)
+                                .background(Color.black.opacity(0.25))
+                                .clipShape(Capsule())
+                        }
+                        .padding(.leading, 16)
+                        .padding(.top, 28) // lowered a bit
+                        .accessibilityLabel(isEditing ? "Done editing" : "Edit profile")
+                    }
+
+                    // Avatar + Arabic subtitle
+                    VStack(spacing: 6) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(Color.white.opacity(0.25))
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 26, weight: .semibold))
+                                .foregroundColor(.white)
+                        }
+                        .frame(width: 60, height: 60)
+
+                        Text("إدارة الملف الشخصي")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundColor(.white)
+                    }
+                    .padding(.bottom, 14)
                 }
-                .padding(.top, 20)
+                .ignoresSafeArea(edges: .top)
 
-                // Parent name
-                InfoRow(title: "Parent's Name", value: appModel.parentName.isEmpty ? "—" : appModel.parentName)
+                // Editable profile content
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        InfoCard(
+                            title: "Parent Name",
+                            systemImage: "person.2.fill",
+                            borderColor: .appYellow,
+                            iconBackground: .appYellow.opacity(0.15),
+                            text: $appModel.parentName,
+                            placeholder: "Enter your name"
+                        )
+                        .disabled(!isEditing)
+                        .opacity(isEditing ? 1 : 0.55)
 
-                // Child name
-                InfoRow(title: "Child's Name", value: appModel.childName.isEmpty ? "—" : appModel.childName)
+                        InfoCard(
+                            title: "Child Name",
+                            systemImage: "person.fill",
+                            borderColor: .appBlue.opacity(0.35),
+                            iconBackground: .appBlue.opacity(0.15),
+                            text: $appModel.childName,
+                            placeholder: "Enter your child's name"
+                        )
+                        .disabled(!isEditing)
+                        .opacity(isEditing ? 1 : 0.55)
 
-                // Skills to focus on
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Skills to Focus On")
-                        .font(.headline)
-                    if appModel.selectedSkills.isEmpty {
-                        Text("No skills selected")
-                            .foregroundStyle(.gray)
-                    } else {
-                        let skills = Array(appModel.selectedSkills).sorted { $0.title < $1.title }
-                        VStack(alignment: .leading, spacing: 6) {
-                            ForEach(skills, id: \.id) { skill in
-                                HStack(spacing: 8) {
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .fill(skill.color)
-                                        .frame(width: 18, height: 18)
-                                        .overlay(
-                                            Image(systemName: skill.systemImage)
-                                                .font(.system(size: 9))
-                                                .foregroundStyle(.white)
-                                        )
-                                    Text(skill.title)
-                                        .font(.subheadline)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.appYellow.opacity(0.15))
+                                        .frame(width: 32, height: 32)
+                                    Image(systemName: "chart.bar.fill")
+                                        .font(.system(size: 14))
+                                        .foregroundStyle(Color.appYellow)
+                                }
+                                Text("Child Level")
+                                    .font(.subheadline.weight(.semibold))
+                                Spacer()
+                            }
+
+                            Picker("Child Level", selection: $appModel.childLevel) {
+                                ForEach(ChildLevel.allCases) { level in
+                                    Text(level.rawValue).tag(level)
                                 }
                             }
+                            .pickerStyle(.segmented)
+                            .disabled(!isEditing)
+                            .opacity(isEditing ? 1 : 0.55)
                         }
-                    }
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(16)
-                .shadow(color: .black.opacity(0.05), radius: 8)
-
-                // Simulate Tomorrow Button
-                Button {
-                    appModel.simulateTomorrow()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "calendar.badge.plus")
-                        Text("Simulate Tomorrow")
-                            .font(.system(size: 17, weight: .semibold))
-                        Spacer()
-                    }
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(
-                        LinearGradient(
-                            colors: [Color.appBlue, Color.appYellow],
-                            startPoint: .leading, endPoint: .trailing
+                        .padding(14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 18)
+                                .stroke(Color.appYellow.opacity(0.35), lineWidth: 1.5)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 18)
+                                        .fill(Color.white)
+                                )
                         )
-                    )
-                    .cornerRadius(16)
+
+                        // Selected Skills section intentionally removed per request.
+
+                        Text("Changes are saved automatically.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 6)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 24)
                 }
-                .padding(.top, 4)
-                .padding(.bottom, 24)
             }
-            .padding(.horizontal, 20)
         }
-        .background(Color(.systemGroupedBackground))
-        .navigationTitle("Profile")
+        // Removed navigationTitle("Profile") to hide the title
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-private struct InfoRow: View {
-    let title: String
-    let value: String
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.headline)
-            Spacer()
-            Text(value)
-                .foregroundStyle(.primary)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                EmptyView()
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8)
     }
 }
 
 #Preview {
-    let model = AppModel()
-    model.parentName = "Sarah"
-    model.childName = "Adam"
-    model.selectedSkills = Set(Skill.all)
-    return NavigationStack { SettingsView().environmentObject(model) }
+    NavigationStack {
+        SettingsView()
+            .environmentObject(AppModel())
+    }
 }
-
