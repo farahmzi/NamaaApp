@@ -10,27 +10,28 @@ import SwiftUI
 struct WelcomeView: View {
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            // Static gradient matching the rest of the app
+            LinearGradient(
+                colors: [
+                    Color(red: 130/255, green: 180/255, blue: 240/255),
+                    Color(red: 200/255, green: 230/255, blue: 250/255),
+                    Color(red: 255/255, green: 250/255, blue: 200/255),
+                    Color(red: 255/255, green: 220/255, blue: 100/255)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
             VStack(spacing: 24) {
                 Spacer()
 
-                // App icon circle
-                ZStack {
-                    Circle()
-                        .stroke(Color.appYellow, lineWidth: 5)
-                        .frame(width: 90, height: 90)
-
-                    Image(systemName: "heart.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
-                        .foregroundStyle(Color.appYellow)
-                }
-
-                Text("(a character or app icon)")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.gray)
+                Image("mom")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 260)
+                    .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 6)
+                    .accessibilityLabel("Welcome illustration")
 
                 Text("Welcome!")
                     .font(.system(size: 34, weight: .bold))
@@ -40,6 +41,7 @@ struct WelcomeView: View {
 
                 NavigationLink {
                     ChildInfoView()
+                        .navigationBarBackButtonHidden(true)
                 } label: {
                     Text("Get Started")
                         .font(.headline)

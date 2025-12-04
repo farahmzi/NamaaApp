@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct CelebrationView: View {
+    @EnvironmentObject private var appModel: AppModel
+
+    let parentName: String
+    let onDismiss: () -> Void
+
     @State private var progress: CGFloat = 0.0
-    
+
     var body: some View {
         ZStack {
-            // الخلفية
             LinearGradient(
                 gradient: Gradient(colors: [
                     Color(red: 0.85, green: 0.93, blue: 1.0),
@@ -22,15 +26,13 @@ struct CelebrationView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
-            
+
             VStack(spacing: 30) {
-                
-                // دائرة النسبة
                 ZStack {
                     Circle()
                         .stroke(Color.white.opacity(0.4), lineWidth: 18)
                         .frame(width: 230, height: 230)
-                    
+
                     Circle()
                         .trim(from: 0, to: progress)
                         .stroke(
@@ -40,34 +42,22 @@ struct CelebrationView: View {
                         .rotationEffect(.degrees(-90))
                         .frame(width: 230, height: 230)
                         .animation(.easeOut(duration: 1.5), value: progress)
-                    
-                    VStack {
-                        Text("🎉")
-                            .font(.system(size: 40))
-                        Text("\(Int(progress * 100))%")
-                            .font(.system(size: 38, weight: .bold))
-                            .foregroundColor(.white)
-                    }
+
+                    // Centered percentage only (no emoji)
+                    Text("\(Int(progress * 100))%")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
                 }
                 .padding(.top, 40)
                 .onAppear {
-                    progress = 0.75
+                    progress = 1.0
                 }
-                
-                // البوكسين
-                HStack(spacing: 20) {
-                    statBox(color: .blue, number: "45", title: "دقيقة نشاط")
-                    statBox(color: .yellow, number: "3", title: "مهام مكتملة")
-                }
-                
-                // رسالة تحفيزية
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text("رسالة تحفيزية 💪")
-                            .font(.headline)
-                        Spacer()
-                    }
-                    Text("الرسالة")
+
+                VStack(spacing: 8) {
+                    Text("Great job, \(parentName)!")
+                        .font(.headline)
+                    Text("All tasks completed for today. Keep it up! 🌟")
                         .foregroundColor(.gray)
                 }
                 .padding()
@@ -75,70 +65,41 @@ struct CelebrationView: View {
                 .background(Color.white.opacity(0.85))
                 .cornerRadius(25)
                 .padding(.horizontal)
-                
-                // شارة جديدة
-                HStack {
-                    Image(systemName: "trophy.fill")
-                    Spacer()
-                    VStack(alignment: .center) {
-                        Text("شارة جديدة")
-                            .font(.headline)
-                        Text("بطل الأسبوع")
-                            .font(.subheadline)
+
+                Button {
+                    // Switch to Progress tab and dismiss
+                    appModel.selectedTab = 1
+                    onDismiss()
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("View Progress")
+                            .font(.system(size: 17, weight: .semibold))
+                        Image(systemName: "chart.bar.fill")
+                        Spacer()
                     }
-                    Spacer()
-                    Image(systemName: "star.circle.fill")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        LinearGradient(
+                            colors: [Color.appBlue, Color.appYellow],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(25)
+                    .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 3)
+                    .padding(.horizontal)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.yellow.opacity(0.8))
-                .cornerRadius(25)
-                .padding(.horizontal)
-                
-                // زر العودة
-                HStack {
-                    Spacer()
-                    Text("العودة للرئيسية")
-                        .font(.headline)
-                    Image(systemName: "house")
-                    Spacer()
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.yellow.opacity(0.7))
-                .cornerRadius(25)
-                .padding(.horizontal)
-                
+
                 Spacer()
             }
         }
     }
-    
-    // دالة البوكسات الصغيرة
-    func statBox(color: Color, number: String, title: String) -> some View {
-        VStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(color.opacity(0.8))
-                .frame(width: 50, height: 50)
-                .overlay(
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .foregroundColor(.white)
-                )
-            
-            Text(number)
-                .font(.title2)
-            
-            Text(title)
-                .font(.footnote)
-                .foregroundColor(.gray)
-        }
-        .padding()
-        .frame(width: 150, height: 130)
-        .background(Color.white.opacity(0.85))
-        .cornerRadius(20)
-    }
 }
 
 #Preview {
-    CelebrationView()
+    CelebrationView(parentName: "Parent") { }
+        .environmentObject(AppModel())
 }

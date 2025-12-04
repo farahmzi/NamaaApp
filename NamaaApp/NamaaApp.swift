@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct NamaaAppApp: App {
+    @StateObject private var appModel = AppModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                WelcomeView()
+            }
+            .environmentObject(appModel)
         }
     }
 }
+

@@ -12,7 +12,6 @@ struct TasksView: View {
 
     var body: some View {
         ZStack {
-            // Background gradient matching the design
             LinearGradient(
                 colors: [
                     Color(red: 130/255, green: 180/255, blue: 240/255),
@@ -27,7 +26,6 @@ struct TasksView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    // Header
                     HStack {
                         Spacer()
                         Text("Today’s Tasks")
@@ -38,7 +36,6 @@ struct TasksView: View {
                     .padding(.top, 50)
                     .padding(.bottom, 20)
 
-                    // Task Cards
                     VStack(spacing: 12) {
                         NavigationLink(destination: DailyStoryView()) {
                             TaskCard(
@@ -100,7 +97,6 @@ struct TasksView: View {
     }
 }
 
-// MARK: - Task Card Component
 struct TaskCard: View {
     let title: String
     let category: String
@@ -112,7 +108,6 @@ struct TaskCard: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Icon on the right
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(iconColor)
@@ -125,7 +120,6 @@ struct TaskCard: View {
 
             Spacer()
 
-            // Text content
             VStack(alignment: .trailing, spacing: 4) {
                 Text(title)
                     .font(.system(size: 15, weight: .semibold))
@@ -156,13 +150,12 @@ struct TaskCard: View {
                 }
             }
 
-            // Checkbox on the left
             ZStack {
                 Circle()
                     .strokeBorder(isCompleted ? Color.clear : Color.gray.opacity(0.3), lineWidth: 2)
                     .background(
                         Circle()
-                            .fill(isCompleted ? Color(red: 255/255, green: 200/255, blue: 100/255) : Color.white)
+                            .fill(isCompleted ? Color.gray.opacity(0.5) : Color.white)
                     )
                     .frame(width: 24, height: 24)
 
@@ -180,7 +173,7 @@ struct TaskCard: View {
     }
 }
 
-// MARK: - Daily Story View (nested under Tasks)
+// MARK: - Daily Story View (restored so the NavigationLink compiles)
 struct DailyStoryView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showRating = false
