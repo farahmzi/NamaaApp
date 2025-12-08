@@ -6,15 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		CB7BCA612EE083A1004B6793 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7BCA602EE083A1004B6793 /* Color+App.swift */; };
-		CB7BCA632EE08448004B6793 /* Color+AppPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7BCA622EE08448004B6793 /* Color+AppPalette.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
-		30BBCCE82EDDB2890004C04E /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NamaaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CB7BCA602EE083A1004B6793 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
-		CB7BCA622EE08448004B6793 /* Color+AppPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+AppPalette.swift"; sourceTree = "<group>"; };
+		30BBCCE82EDDB2890004C04E /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NamaaApp.app; path = "/Users/elhamalhemidi/Documents/NamaaApp/build/Debug-iphoneos/NamaaApp.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,9 +33,6 @@
 			isa = PBXGroup;
 			children = (
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
-				30BBCCE82EDDB2890004C04E /* NamaaApp.app */,
-				CB7BCA602EE083A1004B6793 /* Color+App.swift */,
-				CB7BCA622EE08448004B6793 /* Color+AppPalette.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,8 +112,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB7BCA612EE083A1004B6793 /* Color+App.swift in Sources */,
-				CB7BCA632EE08448004B6793 /* Color+AppPalette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

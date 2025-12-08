@@ -42,18 +42,6 @@ struct SkillsSelectionView: View {
 
                 Spacer()
 
-                NavigationLink(isActive: $navigate) {
-                    RootTabView()
-                        .navigationBarBackButtonHidden(true)
-                        .onAppear {
-                            appModel.selectedSkills = selectedSkills
-                            appModel.ensureTasksForToday()
-                        }
-                } label: {
-                    EmptyView()
-                }
-                .hidden()
-
                 Button {
                     appModel.selectedSkills = selectedSkills
                     appModel.ensureTasksForToday()
@@ -73,6 +61,15 @@ struct SkillsSelectionView: View {
             .padding(.horizontal, 24)
         }
         .navigationBarBackButtonHidden(true)
+        .navigationDestination(isPresented: $navigate) {
+            RootTabView()
+                .navigationBarBackButtonHidden(true)
+                .onAppear {
+                    // Redundant because we set it before toggling navigate, but harmless if kept:
+                    appModel.selectedSkills = selectedSkills
+                    appModel.ensureTasksForToday()
+                }
+        }
     }
 
     private func toggle(_ skill: Skill) {

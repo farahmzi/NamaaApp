@@ -63,17 +63,6 @@ struct ChildInfoView: View {
                     placeholder: "Enter your child's name"
                 )
 
-                // Child level card with refined 3-option pill
-                LevelCard(
-                    title: "Child Level",
-                    systemImage: "chart.bar.fill",
-                    borderColor: AppGradient.brandYellow.opacity(0.8),
-                    iconBackground: AppGradient.brandYellow.opacity(0.15),
-                    selection: $childLevel
-                )
-
-                Spacer()
-
                 NavigationLink {
                     SkillsSelectionView()
                         .onAppear {

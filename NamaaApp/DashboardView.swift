@@ -28,6 +28,7 @@ struct DashboardView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
+            .accessibilityLabel("خلفية متدرجة")
 
             ScrollView {
                 VStack(spacing: 0) {
@@ -37,9 +38,11 @@ struct DashboardView: View {
                             Text("Welcome 👋")
                                 .font(.system(size: 26, weight: .bold))
                                 .foregroundColor(.white)
+                                .accessibilityLabel("مرحباً")
                             Text("Let's make today special")
                                 .font(.system(size: 16))
                                 .foregroundColor(.white.opacity(0.95))
+                                .accessibilityLabel("لنصنع يوماً مميزاً")
                         }
                         Spacer()
                     }
@@ -54,6 +57,8 @@ struct DashboardView: View {
                     )
                     .padding(.horizontal, 20)
                     .padding(.bottom, 12)
+                    .accessibilityHint("مهارات التركيز. اضغط تعديل لاختيار المهارات.")
+                    .accessibilityLabel("بطاقة مهارات التركيز")
 
                     // Daily Progress mini-summary
                     VStack(alignment: .leading, spacing: 15) {
@@ -62,9 +67,11 @@ struct DashboardView: View {
                                 Text("Daily Progress")
                                     .font(.system(size: 13))
                                     .foregroundColor(.gray)
+                                    .accessibilityLabel("التقدم اليومي")
                                 Text("\(appModel.completedCount) of \(max(1, appModel.todayTasks.count))")
                                     .font(.system(size: 22, weight: .bold))
                                     .foregroundColor(.black)
+                                    .accessibilityLabel("إنجاز \(appModel.completedCount) من \(max(1, appModel.todayTasks.count)) مهمة")
                             }
                             Spacer()
                             ZStack {
@@ -75,18 +82,22 @@ struct DashboardView: View {
                                     .font(.system(size: 26, weight: .semibold))
                                     .foregroundStyle(Color.appBlue)
                             }
+                            .accessibilityLabel("شارة إنجاز")
+                            .accessibilityHint("شارة للإنجاز اليومي")
                         }
 
                         Text("\(Int(progressRatio * 100))%")
                             .font(.system(size: 38, weight: .bold))
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityLabel("النسبة المئوية \(Int(progressRatio * 100)) بالمئة")
 
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.gray.opacity(0.2))
                                     .frame(height: 8)
+                                    .accessibilityHidden(true)
 
                                 LinearGradient(
                                     colors: [
@@ -98,9 +109,12 @@ struct DashboardView: View {
                                 )
                                 .frame(width: geometry.size.width * CGFloat(progressRatio), height: 8)
                                 .cornerRadius(10)
+                                .accessibilityHidden(true)
                             }
                         }
                         .frame(height: 8)
+                        .accessibilityLabel("شريط التقدم")
+                        .accessibilityHint("يمثل نسبة إنجاز المهام اليوم")
                     }
                     .padding(20)
                     .background(Color.white)
@@ -108,12 +122,14 @@ struct DashboardView: View {
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 15)
+                    .accessibilityHint("ملخص التقدم اليومي")
 
                     HStack {
                         Text("Today’s Tasks")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityLabel("مهام اليوم")
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 15)
@@ -131,6 +147,10 @@ struct DashboardView: View {
                                 TaskRow(task: task)
                             }
                             .disabled(task.isCompleted)
+                            .accessibilityLabel(task.isCompleted ? "مهمة \(task.title) مكتملة" : "افتح تفاصيل المهمة \(task.title)")
+                            .accessibilityHint(task.isCompleted ? "تم الانتهاء من هذه المهمة" : "اضغط لعرض الخطوات وتقييم الأداء")
+                            .accessibilityAddTraits(.isButton)
+                            .accessibilityHint(task.isCompleted ? "مهمة مكتملة" : "افتح التفاصيل")
                         }
                     }
                     .padding(.horizontal, 20)
@@ -151,6 +171,9 @@ struct DashboardView: View {
                 appModel.markCelebrationShown()
                 showCelebration = false
             }
+            .accessibilityLabel("شاشة تهنئة")
+            .accessibilityHint("اضغط في أي مكان للانتقال إلى صفحة التقدم")
+            .accessibilityHint("تهانينا! أنجزتم جميع المهام اليوم")
         }
         .sheet(isPresented: $showEditSkillsSheet) {
             EditSkillsSheet(
@@ -166,6 +189,9 @@ struct DashboardView: View {
                 }
             )
             .presentationDetents([.large])
+            .accessibilityLabel("تحرير المهارات")
+            .accessibilityHint("اختر المهارات التي تريد التركيز عليها")
+            .accessibilityHint("قائمة بجميع المهارات المتاحة")
         }
     }
 
@@ -192,6 +218,7 @@ private struct TaskRow: View {
                     .font(.system(size: 24))
                     .foregroundColor(Color.appBlue)
             }
+            .accessibilityHidden(true)
 
             Spacer()
 
@@ -204,6 +231,8 @@ private struct TaskRow: View {
                     .font(.system(size: 11))
                     .foregroundColor(.gray)
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(task.title)، الفئة \(task.category)")
 
             ZStack {
                 Circle()
@@ -220,11 +249,13 @@ private struct TaskRow: View {
                         .foregroundColor(.white)
                 }
             }
+            .accessibilityHidden(true)
         }
         .padding(15)
         .background(Color.white.opacity(task.isCompleted ? 0.6 : 1.0))
         .cornerRadius(15)
         .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .accessibilityHint(task.isCompleted ? "هذه المهمة مكتملة" : "مهمة غير مكتملة")
     }
 }
 
@@ -240,6 +271,7 @@ private struct FocusSkillsCard: View {
             HStack {
                 Label("Focus Skills", systemImage: "slider.horizontal.3")
                     .font(.headline)
+                    .accessibilityLabel("مهارات التركيز")
                 Spacer()
                 Button(action: onEditTapped) {
                     HStack(spacing: 6) {
@@ -253,12 +285,17 @@ private struct FocusSkillsCard: View {
                     .foregroundStyle(Color.appYellow)
                     .cornerRadius(12)
                 }
+                .accessibilityLabel("تعديل المهارات")
+                .accessibilityHint("اضغط لاختيار أو إزالة مهارات التركيز")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityHint("تعديل قائمة المهارات")
             }
 
             if selectedSkills.isEmpty {
                 Text("No skills selected yet. Tap Edit to choose.")
                     .font(.footnote)
                     .foregroundStyle(.gray)
+                    .accessibilityLabel("لا توجد مهارات محددة بعد. اضغط تعديل للاختيار.")
             } else {
                 LazyVGrid(columns: columns, alignment: .leading, spacing: 8) {
                     ForEach(selectedSkills, id: \.id) { skill in
@@ -271,6 +308,7 @@ private struct FocusSkillsCard: View {
                                         .font(.system(size: 11))
                                         .foregroundStyle(.white)
                                 )
+                                .accessibilityHidden(true)
                             Text(skill.title)
                                 .font(.footnote)
                                 .foregroundStyle(.primary)
@@ -281,6 +319,8 @@ private struct FocusSkillsCard: View {
                         .padding(.horizontal, 12)
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
+                        .accessibilityLabel("مهارة: \(skill.title)")
+                        .accessibilityHint("عنصر مهارة محددة")
                     }
                 }
             }
@@ -291,6 +331,7 @@ private struct FocusSkillsCard: View {
                 .fill(Color.white)
                 .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
         )
+        .accessibilityLabel("بطاقة مهارات")
     }
 }
 
@@ -308,6 +349,7 @@ private struct EditSkillsSheet: View {
                     HStack {
                         Image(systemName: selected.contains(skill) ? "checkmark.circle.fill" : "circle")
                             .foregroundStyle(selected.contains(skill) ? Color.appYellow : Color.gray.opacity(0.6))
+                            .accessibilityHidden(true)
                         Text(skill.title)
                         Spacer()
                         RoundedRectangle(cornerRadius: 8)
@@ -318,6 +360,7 @@ private struct EditSkillsSheet: View {
                                     .font(.system(size: 12))
                                     .foregroundStyle(.white)
                             )
+                            .accessibilityHidden(true)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -327,16 +370,27 @@ private struct EditSkillsSheet: View {
                             selected.insert(skill)
                         }
                     }
+                    .accessibilityLabel(selected.contains(skill) ? "إلغاء تحديد \(skill.title)" : "تحديد \(skill.title)")
+                    .accessibilityHint("اضغط للتبديل")
+                    .accessibilityHint("عنصر مهارة")
                 }
             }
             .navigationTitle("Edit Skills")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { onCancel() }
+                        .accessibilityLabel("إلغاء")
+                        .accessibilityHint("إغلاق بدون حفظ")
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityHint("إغلاق النافذة")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { onDone(selected) }
                         .disabled(selected.isEmpty)
+                        .accessibilityLabel("تم")
+                        .accessibilityHint("حفظ الاختيارات والعودة")
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityHint("حفظ المهارات المحددة")
                 }
             }
         }
