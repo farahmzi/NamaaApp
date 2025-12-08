@@ -23,10 +23,15 @@ enum AppGradient {
         }
     }
 
+    // Brand yellow used for primary buttons (matches screenshot: #FFB800)
+    static var brandYellow: Color {
+        Color(red: 255/255, green: 184/255, blue: 0/255)
+    }
+
     // Blue → Yellow button gradient matching the palette
     static var button: LinearGradient {
         LinearGradient(
-            colors: [Color.appBlue, Color.appYellow],
+            colors: [Color.appBlue, brandYellow],
             startPoint: .leading,
             endPoint: .trailing
         )

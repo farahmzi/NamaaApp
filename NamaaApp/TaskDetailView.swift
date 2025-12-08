@@ -133,10 +133,35 @@ struct TaskDetailView: View {
                 .shadow(color: .black.opacity(0.05), radius: 8)
                 .padding(.horizontal)
 
+                // Encouraging message box
+                HStack(alignment: .top, spacing: 12) {
+                    Text("👏")
+                        .font(.system(size: 28))
+                        .accessibilityLabel("Clapping")
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Great effort!")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text("Keep going — every small step counts.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(14)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.white)
+                        .shadow(color: .black.opacity(0.05), radius: 8)
+                )
+                .padding(.horizontal)
+
                 Button {
                     guard let rating = selectedRating else { return }
                     appModel.completeTask(task, with: rating, note: noteText)
-                    dismiss() // return to main page
+                    dismiss()
                 } label: {
                     Text("Save Rating")
                         .font(.system(size: 17, weight: .semibold))

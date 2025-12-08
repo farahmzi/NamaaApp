@@ -10,18 +10,7 @@ import SwiftUI
 struct WelcomeView: View {
     var body: some View {
         ZStack {
-            // Static gradient matching the rest of the app
-            LinearGradient(
-                colors: [
-                    Color(red: 130/255, green: 180/255, blue: 240/255),
-                    Color(red: 200/255, green: 230/255, blue: 250/255),
-                    Color(red: 255/255, green: 250/255, blue: 200/255),
-                    Color(red: 255/255, green: 220/255, blue: 100/255)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            AppGradient.primary.ignoresSafeArea()
 
             VStack(spacing: 24) {
                 Spacer()
@@ -35,7 +24,7 @@ struct WelcomeView: View {
 
                 Text("Welcome!")
                     .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(Color.appYellow)
+                    .foregroundStyle(AppGradient.brandYellow)
 
                 Spacer()
 
@@ -44,12 +33,15 @@ struct WelcomeView: View {
                         .navigationBarBackButtonHidden(true)
                 } label: {
                     Text("Get Started")
-                        .font(.headline)
+                        .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.appYellow)
-                        .cornerRadius(16)
+                        .frame(height: 60)
+                        .background(
+                            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                .fill(AppGradient.brandYellow) // exact yellow
+                                .shadow(color: .black.opacity(0.18), radius: 12, x: 0, y: 6)
+                        )
                         .padding(.horizontal, 32)
                         .padding(.bottom, 40)
                 }

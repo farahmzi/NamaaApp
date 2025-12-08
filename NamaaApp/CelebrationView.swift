@@ -13,7 +13,8 @@ struct CelebrationView: View {
     let parentName: String
     let onDismiss: () -> Void
 
-    @State private var progress: CGFloat = 0.0
+    @State private var animateRays = false
+    @State private var fadeHint = false
 
     var body: some View {
         ZStack {
@@ -26,74 +27,60 @@ struct CelebrationView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
+            .contentShape(Rectangle())
+            .onTapGesture {
+                appModel.selectedTab = 1
+                onDismiss()
+            }
 
-            VStack(spacing: 30) {
+            VStack(spacing: 26) {
+                Spacer().frame(height: 80)
+
                 ZStack {
-                    Circle()
-                        .stroke(Color.white.opacity(0.4), lineWidth: 18)
-                        .frame(width: 230, height: 230)
-
-                    Circle()
-                        .trim(from: 0, to: progress)
-                        .stroke(
-                            Color.white,
-                            style: StrokeStyle(lineWidth: 18, lineCap: .round)
-                        )
-                        .rotationEffect(.degrees(-90))
-                        .frame(width: 230, height: 230)
-                        .animation(.easeOut(duration: 1.5), value: progress)
-
-                    // Centered percentage only (no emoji)
-                    Text("\(Int(progress * 100))%")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
+                    // Animated “rays” behind the clap
+                    ForEach(0..<8) { i in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.black.opacity(0.12))
+                            .frame(width: 6, height: animateRays ? 22 : 8)
+                            .offset(y: -42)
+                            .rotationEffect(.degrees(Double(i) * 45))
+                            .opacity(animateRays ? 1 : 0)
+                    }
+                    Text("👏")
+                        .font(.system(size: 72))
+                        .scaleEffect(animateRays ? 1.05 : 0.95)
+                        .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: animateRays)
                 }
-                .padding(.top, 40)
-                .onAppear {
-                    progress = 1.0
-                }
+                .onAppear { animateRays = true }
 
+                // Message card
                 VStack(spacing: 8) {
                     Text("Great job, \(parentName)!")
-                        .font(.headline)
-                    Text("All tasks completed for today. Keep it up! 🌟")
-                        .foregroundColor(.gray)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(.primary)
+                    Text("You did a wonderful job today\nsupporting your child!")
+                        .font(.system(size: 15))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.white.opacity(0.85))
-                .cornerRadius(25)
-                .padding(.horizontal)
-
-                Button {
-                    // Switch to Progress tab and dismiss
-                    appModel.selectedTab = 1
-                    onDismiss()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("View Progress")
-                            .font(.system(size: 17, weight: .semibold))
-                        Image(systemName: "chart.bar.fill")
-                        Spacer()
-                    }
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.appBlue, Color.appYellow],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .cornerRadius(25)
-                    .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 3)
-                    .padding(.horizontal)
-                }
+                .padding(.vertical, 22)
+                .padding(.horizontal, 26)
+                .background(
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .fill(Color.white)
+                        .shadow(color: .black.opacity(0.15), radius: 18, x: 0, y: 8)
+                )
+                .padding(.horizontal, 32)
 
                 Spacer()
+
+                Text("Tap anywhere to dismiss")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.9))
+                    .opacity(fadeHint ? 0.3 : 1)
+                    .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: fadeHint)
+                    .onAppear { fadeHint = true }
+                    .padding(.bottom, 30)
             }
         }
     }

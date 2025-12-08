@@ -264,15 +264,14 @@ private struct HistoryRow: View {
 
     model.pastDays = [
         DailyLog(date: yesterdayStart, entries: [
-            HistoryEntry(date: cal.date(byAdding: .hour, value: 10, to: yesterdayStart)!, taskTitle: "Story Time", category: "Communication Skills", rating: .done, note: "Great reading"),
-            HistoryEntry(date: cal.date(byAdding: .hour, value: 12, to: yesterdayStart)!, taskTitle: "Memory Match", category: "Cognitive Skills", rating: .doneWithHelp, note: nil)
+            HistoryEntry(date: cal.date(byAdding: .hour, value: 10, to: yesterdayStart)!, taskTitle: "Story Time", category: "Communication Skills", rating: .excellent, note: "Great reading"),
+            HistoryEntry(date: cal.date(byAdding: .hour, value: 12, to: yesterdayStart)!, taskTitle: "Memory Match", category: "Cognitive Skills", rating: .good, note: nil)
         ])
     ]
 
     model.todayHistory = [
-        HistoryEntry(date: cal.date(byAdding: .hour, value: 9, to: todayStart)!, taskTitle: "Team Builder", category: "Social Skills", rating: .done, note: "Played well")
+        HistoryEntry(date: cal.date(byAdding: .hour, value: 9, to: todayStart)!, taskTitle: "Team Builder", category: "Social Skills", rating: .excellent, note: "Played well")
     ]
 
     return NavigationStack { Progressview().environmentObject(model) }
 }
-
