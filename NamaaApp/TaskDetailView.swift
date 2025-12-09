@@ -16,22 +16,6 @@ struct TaskDetailView: View {
     @State private var selectedRating: TaskRating? = nil
     @State private var noteText: String = ""
 
-    // Simple example steps
-    private var steps: [String] {
-        switch task.icon {
-        case "brain.head.profile":
-            return ["Explain the game", "Match pairs", "Praise effort"]
-        case "bubble.left.and.bubble.right.fill":
-            return ["Read together", "Ask questions", "Encourage answers"]
-        case "person.3.fill":
-            return ["Invite participation", "Practice turn-taking", "Celebrate sharing"]
-        case "figure.walk":
-            return ["Warm-up", "Main movement", "Cool down"]
-        default:
-            return ["Start activity", "Do the task", "Wrap up"]
-        }
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -59,12 +43,12 @@ struct TaskDetailView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Steps")
                         .font(.headline)
-                    ForEach(steps.indices, id: \.self) { idx in
+                    ForEach(task.steps.indices, id: \.self) { idx in
                         HStack(alignment: .top, spacing: 10) {
                             Text("\(idx + 1).")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(Color.appYellow)
-                            Text(steps[idx])
+                            Text(task.steps[idx])
                                 .font(.subheadline)
                         }
                     }
@@ -166,7 +150,7 @@ struct TaskDetailView: View {
 #Preview {
     let model = AppModel()
     model.todayTasks = [
-        TaskItem(title: "Story Time", category: "Communication Skills", icon: "bubble.left.and.bubble.right.fill")
+        TaskItem(title: "Story Time", category: "Communication Skills", icon: "bubble.left.and.bubble.right.fill", steps: ["Read together", "Ask questions", "Encourage answers"])
     ]
     return NavigationStack { TaskDetailView(task: model.todayTasks[0]).environmentObject(model) }
 }

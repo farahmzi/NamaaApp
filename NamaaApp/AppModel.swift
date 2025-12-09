@@ -46,6 +46,7 @@ struct TaskItem: Identifiable, Hashable {
     let title: String
     let category: String
     let icon: String
+    var steps: [String] = [] // NEW: real steps from TaskBank
     var isCompleted: Bool = false
     var rating: TaskRating? = nil
     var note: String? = nil
@@ -116,11 +117,26 @@ final class AppModel: ObservableObject {
         var skillIndex = 0
         while tasks.count < desiredCount {
             let skill = skillsArray[skillIndex % skillsArray.count]
-            let titles = catalog(for: skill)
-            // to avoid repeating the same first title, pick a title offset by tasks.count
-            let title = titles[(tasks.count) % titles.count]
-            let icon: String = skill.systemImage
-            tasks.append(TaskItem(title: title, category: skill.title, icon: icon))
+
+            // Pull bank for this skill’s category
+            let bank = TaskBank.tasks(for: skill)
+            guard !bank.isEmpty else {
+                // If bank is empty for some reason, push a generic
+                let fallback = TaskItem(title: "Daily Activity", category: skill.title, icon: skill.systemImage, steps: ["Start activity", "Do the task", "Wrap up"])
+                tasks.append(fallback)
+                skillIndex += 1
+                continue
+            }
+
+            // Stable pseudo-random selection: offset by current tasks.count
+            let def = bank[(tasks.count) % bank.count]
+            let item = TaskItem(
+                title: def.title,
+                category: def.category,
+                icon: def.icon,
+                steps: def.steps
+            )
+            tasks.append(item)
             skillIndex += 1
         }
 
@@ -130,21 +146,6 @@ final class AppModel: ObservableObject {
     private func orderedSelectedSkills() -> [Skill] {
         // Stable order by title to avoid randomness and duplicates
         Array(selectedSkills).sorted { $0.title < $1.title }
-    }
-
-    private func catalog(for skill: Skill) -> [String] {
-        switch skill.systemImage {
-        case "brain.head.profile":
-            return ["Memory Match", "Shape Sorting", "Pattern Finder", "Number Hunt", "Color Logic"]
-        case "bubble.left.and.bubble.right.fill":
-            return ["Story Time", "Picture Talk", "Word Builder", "Name That Object", "Rhyme Time"]
-        case "person.3.fill":
-            return ["Sharing Game", "Turn Taking", "Role Play", "Emotion Match", "Team Builder"]
-        case "figure.walk":
-            return ["Balance Walk", "Ball Toss", "Finger Trace", "Clap Patterns", "Stretch & Reach"]
-        default:
-            return ["Daily Activity"]
-        }
     }
 
     func toggleTask(_ task: TaskItem) {
@@ -178,11 +179,12 @@ final class AppModel: ObservableObject {
     }
 
     private func defaultTasks(count: Int) -> [TaskItem] {
+        // Use one task from each skill with simple steps so app still works without selection
         let fallback = [
-            TaskItem(title: "Story Time", category: "Communication Skills", icon: "bubble.left.and.bubble.right.fill"),
-            TaskItem(title: "Memory Match", category: "Cognitive Skills", icon: "brain.head.profile"),
-            TaskItem(title: "Team Builder", category: "Social Skills", icon: "person.3.fill"),
-            TaskItem(title: "Ball Toss", category: "Motor Skills", icon: "figure.walk")
+            TaskItem(title: "Story Time", category: "Communication Skills", icon: "bubble.left.and.bubble.right.fill", steps: ["Read together", "Ask questions", "Encourage answers"]),
+            TaskItem(title: "Memory Match", category: "Cognitive Skills", icon: "brain.head.profile", steps: ["Explain the game", "Match pairs", "Praise effort"]),
+            TaskItem(title: "Team Builder", category: "Social Skills", icon: "person.3.fill", steps: ["Invite participation", "Practice turn-taking", "Celebrate sharing"]),
+            TaskItem(title: "Ball Toss", category: "Motor Skills", icon: "figure.walk", steps: ["Warm-up", "Main movement", "Cool down"])
         ]
         if count <= fallback.count { return Array(fallback.prefix(count)) }
         var arr = fallback
