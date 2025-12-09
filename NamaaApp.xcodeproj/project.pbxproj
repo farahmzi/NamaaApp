@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		30BBCCE82EDDB2890004C04E /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NamaaApp.app; path = "/Users/elhamalhemidi/Documents/NamaaApp/build/Debug-iphoneos/NamaaApp.app"; sourceTree = "<absolute>"; };
+		3018B3612EE716E4003A4910 /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NamaaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
+				3018B3612EE716E4003A4910 /* NamaaApp.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,7 +59,7 @@
 			packageProductDependencies = (
 			);
 			productName = NamaaApp;
-			productReference = 30BBCCE82EDDB2890004C04E /* NamaaApp.app */;
+			productReference = 3018B3612EE716E4003A4910 /* NamaaApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
