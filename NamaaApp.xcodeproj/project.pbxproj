@@ -16,6 +16,11 @@
 			path = NamaaApp;
 			sourceTree = "<group>";
 		};
+		3053DE4C2EE9AFF7006A16A7 /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +39,7 @@
 			children = (
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
 				3018B3612EE716E4003A4910 /* NamaaApp.app */,
+				3053DE4C2EE9AFF7006A16A7 /* Views */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,6 +60,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
+				3053DE4C2EE9AFF7006A16A7 /* Views */,
 			);
 			name = NamaaApp;
 			packageProductDependencies = (
