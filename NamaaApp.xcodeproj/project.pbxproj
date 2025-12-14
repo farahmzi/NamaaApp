@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3053DE4E2EE9BED8006A16A7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3053DE4D2EE9BED8006A16A7 /* Localizable.xcstrings */; };
+		3053DE502EE9C157006A16A7 /* Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053DE4F2EE9C14F006A16A7 /* Ex.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3018B3612EE716E4003A4910 /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NamaaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3053DE4D2EE9BED8006A16A7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		3053DE4F2EE9C14F006A16A7 /* Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ex.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -39,6 +46,8 @@
 			children = (
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
 				3018B3612EE716E4003A4910 /* NamaaApp.app */,
+				3053DE4D2EE9BED8006A16A7 /* Localizable.xcstrings */,
+				3053DE4F2EE9C14F006A16A7 /* Ex.swift */,
 				3053DE4C2EE9AFF7006A16A7 /* Views */,
 			);
 			sourceTree = "<group>";
@@ -86,7 +95,7 @@
 				};
 			};
 			buildConfigurationList = 301CC1062ED47B8E0059EC9F /* Build configuration list for PBXProject "NamaaApp" */;
-			developmentRegion = en;
+			developmentRegion = ar;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -110,6 +119,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3053DE4E2EE9BED8006A16A7 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +130,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3053DE502EE9C157006A16A7 /* Ex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +197,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -243,6 +255,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
