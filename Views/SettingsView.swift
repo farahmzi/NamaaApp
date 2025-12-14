@@ -36,29 +36,8 @@ struct SettingsView: View {
                 // Child name
                 InfoRow(title: "Child's Name", value: appModel.childName.isEmpty ? "—" : appModel.childName)
 
-                // Simulate Tomorrow Button
-                Button {
-                    appModel.simulateTomorrow()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "calendar.badge.plus")
-                        Text("Simulate Tomorrow")
-                            .font(.system(size: 17, weight: .semibold))
-                        Spacer()
-                    }
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(
-                        LinearGradient(
-                            colors: [Color.appBlue, Color.appYellow],
-                            startPoint: .leading, endPoint: .trailing
-                        )
-                    )
-                    .cornerRadius(16)
-                }
-                .padding(.top, 4)
-                .padding(.bottom, 24)
+                // Removed: Simulate Tomorrow Button
+                Spacer(minLength: 24)
             }
             .padding(.horizontal, 20)
         }
