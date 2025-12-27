@@ -34,7 +34,7 @@ struct WelcomeView: View {
                 } label: {
                     Text("Get Started")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .frame(height: 60)
                         .background(

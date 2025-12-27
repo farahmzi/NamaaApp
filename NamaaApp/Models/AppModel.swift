@@ -14,6 +14,18 @@ enum ChildLevel: String, CaseIterable, Identifiable {
     case advanced = "Advanced"
 
     var id: String { rawValue }
+
+    // Localized display name
+    var localizedTitle: LocalizedStringKey {
+        switch self {
+        case .beginner:
+            return "child_level.beginner"
+        case .intermediate:
+            return "child_level.intermediate"
+        case .advanced:
+            return "child_level.advanced"
+        }
+    }
 }
 
 enum TaskRating: String, CaseIterable, Identifiable {
@@ -25,18 +37,36 @@ enum TaskRating: String, CaseIterable, Identifiable {
 
     var emoji: String {
         switch self {
-        case .done: return "🙂"
-        case .doneWithHelp: return "😐"
-        case .didntDo: return "☹️"
+        case .done:
+            return "🙂"
+        case .doneWithHelp:
+            return "😐"
+        case .didntDo:
+            return "☹️"
+        }
+    }
+
+    // Localized display name
+    var localizedTitle: LocalizedStringKey {
+        switch self {
+        case .done:
+            return "task_rating.done"
+        case .doneWithHelp:
+            return "task_rating.done_with_help"
+        case .didntDo:
+            return "task_rating.didnt_do"
         }
     }
 
     // Numeric score for averaging
     var score: Double {
         switch self {
-        case .done: return 1.0
-        case .doneWithHelp: return 0.5
-        case .didntDo: return 0.0
+        case .done:
+            return 1.0
+        case .doneWithHelp:
+            return 0.5
+        case .didntDo:
+            return 0.0
         }
     }
 }
@@ -122,7 +152,12 @@ final class AppModel: ObservableObject {
             let bank = TaskBank.tasks(for: skill)
             guard !bank.isEmpty else {
                 // If bank is empty for some reason, push a generic
-                let fallback = TaskItem(title: "Daily Activity", category: skill.title, icon: skill.systemImage, steps: ["Start activity", "Do the task", "Wrap up"])
+                let fallback = TaskItem(
+                    title: "Daily Activity",
+                    category: skill.title,
+                    icon: skill.systemImage,
+                    steps: ["Start activity", "Do the task", "Wrap up"]
+                )
                 tasks.append(fallback)
                 skillIndex += 1
                 continue
@@ -181,10 +216,30 @@ final class AppModel: ObservableObject {
     private func defaultTasks(count: Int) -> [TaskItem] {
         // Use one task from each skill with simple steps so app still works without selection
         let fallback = [
-            TaskItem(title: "Story Time", category: "Communication Skills", icon: "bubble.left.and.bubble.right.fill", steps: ["Read together", "Ask questions", "Encourage answers"]),
-            TaskItem(title: "Memory Match", category: "Cognitive Skills", icon: "brain.head.profile", steps: ["Explain the game", "Match pairs", "Praise effort"]),
-            TaskItem(title: "Team Builder", category: "Social Skills", icon: "person.3.fill", steps: ["Invite participation", "Practice turn-taking", "Celebrate sharing"]),
-            TaskItem(title: "Ball Toss", category: "Motor Skills", icon: "figure.walk", steps: ["Warm-up", "Main movement", "Cool down"])
+            TaskItem(
+                title: "Story Time",
+                category: "Communication Skills",
+                icon: "bubble.left.and.bubble.right.fill",
+                steps: ["Read together", "Ask questions", "Encourage answers"]
+            ),
+            TaskItem(
+                title: "Memory Match",
+                category: "Cognitive Skills",
+                icon: "brain.head.profile",
+                steps: ["Explain the game", "Match pairs", "Praise effort"]
+            ),
+            TaskItem(
+                title: "Team Builder",
+                category: "Social Skills",
+                icon: "person.3.fill",
+                steps: ["Invite participation", "Practice turn-taking", "Celebrate sharing"]
+            ),
+            TaskItem(
+                title: "Ball Toss",
+                category: "Motor Skills",
+                icon: "figure.walk",
+                steps: ["Warm-up", "Main movement", "Cool down"]
+            )
         ]
         if count <= fallback.count { return Array(fallback.prefix(count)) }
         var arr = fallback
@@ -201,17 +256,20 @@ final class AppModel: ObservableObject {
         return max(0.0, min(1.0, sum / Double(rated.count)))
     }
 
-    // Friendly daily status derived from ratings
-    var dailyStatusText: String {
+    // Friendly daily status derived from ratings (returns localization key)
+    var dailyStatusTextKey: LocalizedStringKey {
         let ratings = todayTasks.compactMap { $0.rating }
-        guard !ratings.isEmpty else { return "No ratings yet. Start today’s activities!" }
+        guard !ratings.isEmpty else { return "daily_status.no_ratings" }
 
         let ratio = ratings.map { $0.score }.reduce(0, +) / Double(ratings.count)
 
         switch ratio {
-        case 0.75...1.0: return "Great progress today! 🌟"
-        case 0.4..<0.75: return "Good effort! Keep going! 💪"
-        default: return "Let’s try a bit more. You’ve got this! 👏"
+        case 0.75...1.0:
+            return "daily_status.great_progress"
+        case 0.4..<0.75:
+            return "daily_status.good_effort"
+        default:
+            return "daily_status.try_more"
         }
     }
 
@@ -258,4 +316,3 @@ final class AppModel: ObservableObject {
         generateTodayTasks()
     }
 }
-

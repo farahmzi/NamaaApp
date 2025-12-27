@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct NamaaAppApp: App {
@@ -18,6 +19,9 @@ struct NamaaAppApp: App {
             }
             .environmentObject(appModel)
         }
+        .modelContainer(for: [
+            TaskDefinition.self, // من TaskBank.swift
+            ChildProfile.self    // موديل بيانات الطفل
+        ])
     }
 }
-

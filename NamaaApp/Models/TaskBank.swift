@@ -6,12 +6,33 @@
 //
 
 import Foundation
+import SwiftData
 
-struct TaskDefinition: Hashable {
-    let title: String
-    let category: String // must match Skill.title
-    let icon: String     // must match Skill.systemImage
-    let steps: [String]
+@Model
+final class TaskDefinition: Hashable {
+    var title: String
+    var category: String // must match Skill.title
+    var icon: String     // must match Skill.systemImage
+    var steps: [String]
+
+    init(title: String, category: String, icon: String, steps: [String]) {
+        self.title = title
+        self.category = category
+        self.icon = icon
+        self.steps = steps
+    }
+
+    // Conformance to Hashable so it can be used in sets/keys if needed
+    static func == (lhs: TaskDefinition, rhs: TaskDefinition) -> Bool {
+        lhs.title == rhs.title && lhs.category == rhs.category && lhs.icon == rhs.icon && lhs.steps == rhs.steps
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(title)
+        hasher.combine(category)
+        hasher.combine(icon)
+        hasher.combine(steps)
+    }
 }
 
 enum TaskBank {
@@ -847,4 +868,3 @@ enum TaskBank {
         )
     ]
 }
-

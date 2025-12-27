@@ -105,6 +105,7 @@ struct SkillCard: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
+                // Use stored strings
                 Text(skill.title)
                     .font(.subheadline.weight(.semibold))
                 Text(skill.subtitle)

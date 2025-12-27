@@ -6,9 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     @EnvironmentObject private var appModel: AppModel
+    @Query private var profiles: [ChildProfile]
+
+    private var currentParent: String {
+        profiles.first?.parentName ?? appModel.parentName
+    }
+    private var currentChild: String {
+        profiles.first?.childName ?? appModel.childName
+    }
 
     var body: some View {
         ScrollView {
@@ -31,18 +40,16 @@ struct SettingsView: View {
                 .padding(.top, 4)
 
                 // Parent name
-                InfoRow(title: "Parent's Name", value: appModel.parentName.isEmpty ? "—" : appModel.parentName)
+                InfoRow(title: "Parent's Name", value: currentParent.isEmpty ? "—" : currentParent)
 
                 // Child name
-                InfoRow(title: "Child's Name", value: appModel.childName.isEmpty ? "—" : appModel.childName)
+                InfoRow(title: "Child's Name", value: currentChild.isEmpty ? "—" : currentChild)
 
-                // Removed: Simulate Tomorrow Button
                 Spacer(minLength: 24)
             }
             .padding(.horizontal, 20)
         }
         .background(Color(.systemGroupedBackground))
-        // Keep inline bar title minimal (or you could remove it)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
     }

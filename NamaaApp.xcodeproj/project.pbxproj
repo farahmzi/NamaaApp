@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		30AC8A732EFD717B00DA6071 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 30AC8A722EFD717B00DA6071 /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3018B3612EE716E4003A4910 /* NamaaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NamaaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30AC8A722EFD717B00DA6071 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		301CC1022ED47B8E0059EC9F = {
 			isa = PBXGroup;
 			children = (
+				30AC8A722EFD717B00DA6071 /* Localizable.xcstrings */,
 				301CC10D2ED47B8E0059EC9F /* NamaaApp */,
 				3018B3612EE716E4003A4910 /* NamaaApp.app */,
 			);
@@ -103,6 +109,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30AC8A732EFD717B00DA6071 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

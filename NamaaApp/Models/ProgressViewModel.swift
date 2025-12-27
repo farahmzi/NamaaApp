@@ -10,7 +10,7 @@ final class ProgressViewModel: ObservableObject {
 
     var parentName: String { appModel.parentName }
     var childName: String { appModel.childName }
-    var dailyStatusText: String { appModel.dailyStatusText }
+    var dailyStatusTextKey: LocalizedStringKey { appModel.dailyStatusTextKey }
     var selectedSkills: Set<Skill> { appModel.selectedSkills }
     var todayHistory: [HistoryEntry] { appModel.todayHistory }
 

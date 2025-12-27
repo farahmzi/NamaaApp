@@ -59,7 +59,7 @@ struct Progressview: View {
                                     .padding(.horizontal, 24)
 
                                 // Daily status / motivation
-                                Text(appModel.dailyStatusText)
+                                Text(appModel.dailyStatusTextKey)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundStyle(.white.opacity(0.95))
                                     .shadow(color: .black.opacity(0.22), radius: 1.5, x: 0, y: 1)
@@ -275,4 +275,3 @@ private struct HistoryRow: View {
 
     return NavigationStack { Progressview().environmentObject(model) }
 }
-

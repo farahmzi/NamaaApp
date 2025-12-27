@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ChildInfoView: View {
     @EnvironmentObject private var appModel: AppModel
+    @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [ChildProfile]
 
     @State private var parentName: String = ""
     @State private var childName: String = ""
@@ -66,9 +69,13 @@ struct ChildInfoView: View {
                 NavigationLink {
                     SkillsSelectionView()
                         .onAppear {
+                            // 1) حدّث AppModel لاستخدامه الحالي
                             appModel.parentName = parentName
                             appModel.childName = childName
                             appModel.childLevel = childLevel
+
+                            // 2) احفظ/حدّث السجل في SwiftData
+                            saveProfile()
                         }
                 } label: {
                     Text("Continue")
@@ -91,11 +98,38 @@ struct ChildInfoView: View {
             }
             .padding(.horizontal, 24)
         }
+        .onAppear {
+            // إن وجد سجل محفوظ مسبقاً، املأ الحقول تلقائياً
+            if let existing = profiles.first {
+                parentName = existing.parentName
+                childName = existing.childName
+                childLevel = ChildLevel(rawValue: existing.childLevelRaw) ?? .beginner
+            }
+        }
         .navigationBarBackButtonHidden(false)
+    }
+
+    private func saveProfile() {
+        // سياسة: سجل واحد فقط. إن وجد نحدثه، وإلا ننشئ جديد.
+        if let existing = profiles.first {
+            existing.parentName = parentName
+            existing.childName = childName
+            existing.childLevelRaw = childLevel.rawValue
+            try? modelContext.save()
+        } else {
+            let profile = ChildProfile(
+                parentName: parentName,
+                childName: childName,
+                childLevelRaw: childLevel.rawValue
+            )
+            modelContext.insert(profile)
+            try? modelContext.save()
+        }
     }
 }
 
-// Card hosting the segmented/pill control with tuned spacing to fit nicely
+// Card hosting the segmented/pill control معرّف سابقاً ولم يُستخدم هنا.
+// إن رغبتِ إضافة اختيار المستوى بصرياً، يمكنكِ إعادة استخدام LevelCard/PillSegmented.
 private struct LevelCard: View {
     let title: String
     let systemImage: String
@@ -166,7 +200,7 @@ private struct PillSegmented: View {
             }
             .padding(6)
         }
-        .frame(height: 52) // consistent, roomy height like the screenshot
+        .frame(height: 52)
     }
 }
 

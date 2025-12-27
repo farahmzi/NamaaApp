@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct InfoCard: View {
-    let title: String
+    let title: LocalizedStringKey
     let systemImage: String
     let borderColor: Color
     let iconBackground: Color
     @Binding var text: String
-    let placeholder: String
+    let placeholder: LocalizedStringKey
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
